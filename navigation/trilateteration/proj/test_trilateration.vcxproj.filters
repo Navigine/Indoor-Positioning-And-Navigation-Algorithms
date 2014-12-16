@@ -15,19 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\wifipos\beacon\trilateration.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\test_trilateration.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\wifipos\beacon\beacon.cpp">
+    <ClCompile Include="..\src\trilateration.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\beacon.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\beacon.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\trilateration.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\test_trilateration.h">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

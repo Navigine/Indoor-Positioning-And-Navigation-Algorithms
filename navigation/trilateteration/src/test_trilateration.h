@@ -11,8 +11,8 @@
 
 #include <vector>   
 
-#include "../../../../wifipos/beacon/beacon.h"
-#include "../../../../wifipos/beacon/trilateration.h"
+#include "beacon.h"
+#include "trilateration.h"
 
 #endif
 

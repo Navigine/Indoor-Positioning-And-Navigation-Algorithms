@@ -41,3 +41,14 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+*.sdf
+*.pdb
+*.sbr
+*.obj
+*.tlog
+navigation/trilateteration/Debug/test_trilateration.exe
+*.ilk
+*.log
+navigation/trilateteration/obj/vc120.idb
+navigation/trilateteration/Debug/test_trilateration.bsc

@@ -10,6 +10,16 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\beacon.cpp" />
+    <ClCompile Include="..\src\test_trilateration.cpp" />
+    <ClCompile Include="..\src\trilateration.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\beacon.h" />
+    <ClInclude Include="..\src\test_trilateration.h" />
+    <ClInclude Include="..\src\trilateration.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CE6E0369-51F8-46F5-858A-CA2A2F3B6C8C}</ProjectGuid>
     <RootNamespace>test_trilateration</RootNamespace>
@@ -71,14 +81,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\wifipos\beacon\beacon.cpp" />
-    <ClCompile Include="..\..\..\..\wifipos\beacon\trilateration.cpp" />
-    <ClCompile Include="..\src\test_trilateration.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\test_trilateration.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
