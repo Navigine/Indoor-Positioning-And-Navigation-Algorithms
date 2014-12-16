@@ -52,3 +52,4 @@ navigation/trilateteration/Debug/test_trilateration.exe
 *.log
 navigation/trilateteration/obj/vc120.idb
 navigation/trilateteration/Debug/test_trilateration.bsc
+*.opensdf
