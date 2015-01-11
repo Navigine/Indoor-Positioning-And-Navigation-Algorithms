@@ -4,6 +4,7 @@
  * Copyright (c) 2014 Navigine. All rights reserved.
  *
  */
+
 #if defined WIN32 || defined _WIN32
 #define  _CRT_SECURE_NO_WARNINGS
 #endif
@@ -15,10 +16,21 @@
 using namespace std;
 
 
+
 Trilateration::Trilateration()
 {
   mXY.assign( 2, 0.0 );
   mCurLocationId = 0;
+}
+
+Trilateration::Trilateration( const Trilateration& trilat )
+  : mLocationBeacons( trilat.mLocationBeacons )
+  , mBeaconMeas     ( trilat.mBeaconMeas )
+  , mXY             ( trilat.mXY )
+  , mCurLocationId  ( trilat.mCurLocationId )
+  , mErrorMessage   ( trilat.mErrorMessage )
+{
+
 }
 
 

@@ -28,9 +28,11 @@ class Trilateration
     //constructor and destructor
     Trilateration();
     ~Trilateration();
+    //copy constructor
+    Trilateration(const Trilateration& trilat);
 
     // update measurements if we got new ones
-    void updateMeasurements( std::vector < BeaconMeas >& beaconMeasurements );
+      void updateMeasurements( std::vector < BeaconMeas >& beaconMeasurements );
 
     // fill all the beacons located at the map
     void fillLocationBeacons( std::vector <Beacon>& beaconsOnFloor );
@@ -46,7 +48,7 @@ class Trilateration
 
     static void filterUnknownBeacons( std::vector <BeaconMeas>& beaconMeas,
                                       const std::vector<Beacon>& mapBeacons );
-   
+
     // get X and Y coordinate calculated by trilateration
     double getX() const;
     double getY() const;
@@ -68,8 +70,8 @@ class Trilateration
 
     int calculateTrilaterationCoordinates( );       //calculate coordinates (when data is prepared)
 
-    int deleteDuplicateMeasurements(                //delete duplicate meas and get average RSSI, Dist.
-      std::vector<BeaconMeas>& BeaconMeasurements );
+    int deleteDuplicateMeasurements (std::vector<BeaconMeas>& BeaconMeasurements );
+                                                    ////delete duplicate meas and get average RSSI, Dist.
     
     void getLinearSystem(                           //if we have precise measurements,
       std::vector<double> &matrixA,                 //we determine coordinates by OLS method
@@ -92,16 +94,11 @@ bool compareBeaconMeasByName(
       BeaconMeas second );
 
 
-//find iterator of beacon, wrom which we got measurements
+//find iterator of beacon, from which we got measurements
 std::vector<Beacon>::const_iterator findBeaconForMeas( 
                              const std::vector<Beacon>& mapBeacons,
                              const std::string& measureBeaconId );
 
 
+
 #endif
-
-
-
-
-
-

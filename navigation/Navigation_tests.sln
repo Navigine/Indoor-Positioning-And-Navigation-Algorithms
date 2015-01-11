@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_trilateration", "trilateteration\proj\test_trilateration.vcxproj", "{CE6E0369-51F8-46F5-858A-CA2A2F3B6C8C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_pedometer", "pedometer\proj\test_pedometer.vcxproj", "{0D0EA1FF-B22B-4B0E-93EE-8A9AB7221950}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{CE6E0369-51F8-46F5-858A-CA2A2F3B6C8C}.Debug|Win32.Build.0 = Debug|Win32
 		{CE6E0369-51F8-46F5-858A-CA2A2F3B6C8C}.Release|Win32.ActiveCfg = Release|Win32
 		{CE6E0369-51F8-46F5-858A-CA2A2F3B6C8C}.Release|Win32.Build.0 = Release|Win32
+		{0D0EA1FF-B22B-4B0E-93EE-8A9AB7221950}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0D0EA1FF-B22B-4B0E-93EE-8A9AB7221950}.Debug|Win32.Build.0 = Debug|Win32
+		{0D0EA1FF-B22B-4B0E-93EE-8A9AB7221950}.Release|Win32.ActiveCfg = Release|Win32
+		{0D0EA1FF-B22B-4B0E-93EE-8A9AB7221950}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

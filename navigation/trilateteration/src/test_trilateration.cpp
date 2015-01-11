@@ -6,7 +6,7 @@
  */
 
 #include "test_trilateration.h"
-
+#include <iostream>
 
 void PrintHelp()
 {
@@ -16,6 +16,7 @@ void PrintHelp()
           "For more questions please contact aleksei.smirnov@navigine.com \n\n"
           );
 }
+
 
 int main( void )
 {
@@ -105,7 +106,7 @@ int main( void )
   if (errorCode)
     return errorCode;
 
-  system ("pause");
+  std::cin.get();
   return 0;
 }
 
