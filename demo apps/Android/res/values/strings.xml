@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="address_edit">Server IP-address</string>
+  <string name="app_name">Navigine</string>
+  <string name="beacon_activity_name" formatted="false">Navigine.Beacon</string>
+  <string name="beacon_s_measuring_d_sec" formatted="false">Beacon \&apos;%s\&apos;: %d sec (quality %d%%)</string>
+  <string name="beacon_s_start_measuring" formatted="false">Beacon \&apos;%s\&apos;: start</string>
+  <string name="cancel_button">Cancel</string>
+  <string name="centimeters">cm</string>
+  <string name="connected_to_s_d" formatted="false">Connected to %s:%d</string>
+  <string name="connecting_to_s_d" formatted="false">Connecting to %s:%d</string>
+  <string name="content_loader_name">Load content</string>
+  <string name="delete_button">Delete</string>
+  <string name="disconnected_from_s_d" formatted="false">Disconnected from %s:%d</string>
+  <string name="error">Error!</string>
+  <string name="field_name">Name</string>
+  <string name="field_beacon_id">Beacon</string>
+  <string name="field_x">X</string>
+  <string name="field_x1">X1</string>
+  <string name="field_x2">X2</string>
+  <string name="field_y">Y</string>
+  <string name="field_y1">Y1</string>
+  <string name="field_y2">Y2</string>
+  <string name="file_picker_name">Select file</string>
+  <string name="freq_edit">Transmission frequency, Hz</string>
+  <string name="kilometers">km</string>
+  <string name="load_log_button">Load log</string>
+  <string name="log_mode_navigation">Log mode navigation</string>
+  <string name="log_output">Save log to file</string>
+  <string name="load_content_forced">Forced reload</string>
+  <string name="load_content_title">Load content?</string>
+  <string name="load_content_user_field">User ID:</string>
+  <string name="load_content_location_field">Location:</string>
+  <string name="make_route">Make route</string>
+  <string name="map_mode_name">Navigine.Map</string>
+  <string name="measuring_mode_name">Navigine.Plan</string>
+  <string name="menu_item_console">Console</string>
+  <string name="menu_item_settings">Settings</string>
+  <string name="menu_item_load_map">Load map</string>
+  <string name="menu_item_measuring">Measuring</string>
+  <string name="menu_item_tracking_on">Tracking On</string>
+  <string name="menu_item_tracking_off">Tracking Off</string>
+  <string name="menu_item_cancel_route">Cancel route</string>
+  <string name="menu_item_clear_trace">Clear trace</string>
+  <string name="menu_item_create_beacon">Create beacon</string>
+  <string name="menu_item_cancel_beacon">Cancel beacon</string>
+  <string name="menu_item_create_point">Create point</string>
+  <string name="menu_item_cancel_point">Cancel point</string>
+  <string name="menu_item_create_line">Create line</string>
+  <string name="menu_item_cancel_line">Cancel line</string>  
+  <string name="menu_item_load_content">Load content</string>  
+  <string name="meters">m</string>
+  <string name="object_s_already_exists" formatted="false">Object \&apos;%s\&apos; already exists!</string>
+  <string name="ok_button">Ok</string>
+  <string name="point_s_measuring_d_sec" formatted="false">Point \&apos;%s\&apos;: %d sec (quality %d%%)</string>
+  <string name="point_s_start_measuring" formatted="false">Point \&apos;%s\&apos;: start</string>
+  <string name="port_edit">Server port</string>
+  <string name="server_mode_navigation">Server mode navigation</string>
+  <string name="set_line_end">Set line end</string>
+  <string name="set_measuring_beacon">Set measuring beacon</string>
+  <string name="set_measuring_line">Set measuring line</string>
+  <string name="set_measuring_object">Set measuring object</string>
+  <string name="set_measuring_point">Set measuring point</string>
+  <string name="set_magnetometer_measuring_line">Set magnetometer measuring line</string>
+  <string name="start_button">Start</string>
+  <string name="stop_button">Stop</string>
+  <string name="text_mode_name">Navigine.Console</string>
+  <string name="title_activity_main">NavigineActivity</string>
+  <string name="unable_to_load_map">Unable to load map!</string>
+  <string name="upload_content_option">Upload content</string>
+</resources>

@@ -229,7 +229,7 @@ int Pedometer::calcFilteredAccelMagnitude()
 int Pedometer::detectSteps()
 {
 
-  if ( mAccel.size() < 3 )
+  if ( mAccel.size() <= 3 )
   {
     printf( "ERROR: there is no enough accelerometer measurements to detect steps" );
     return -1;
@@ -248,7 +248,7 @@ int Pedometer::detectSteps()
 
   double negativeAccMagnTime = 0.;
   //we start iterating from 2nd acceleration
-  for ( deque<AccelComponents>::const_iterator currAcc = mAccel.begin() + 1;
+  for ( deque<AccelComponents>::const_iterator currAcc = mAccel.begin() + 2;
         currAcc != mAccel.end();
         ++currAcc )
   {
