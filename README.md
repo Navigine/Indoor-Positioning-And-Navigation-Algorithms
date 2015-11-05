@@ -1,6 +1,6 @@
 #Indoor-navigation-algorithms
 ============================
-<a href="http://navigine.com"><img src="http://navigine.com//images/main_logo.png" align="left" hspace="10" vspace="6"></a>
+<a href="http://navigine.com"><img src="https://navigine.com/wp-content/themes/flat-theme/assets/images/img/w_menuLogo.svg" align="left" height="60" width="180" hspace="10" vspace="5"></a>
 
 This is a public repository of a Navigine company that develops different kinds of a 
 navigation algorithms with the main focus on indoor navigation. Here we will step by step
