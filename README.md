@@ -12,32 +12,6 @@ Navigine Indoor Location Services is a set of unified tools for indoor marketing
 - Refer to the Navigine [User Manual](http://docs.navigine.com/) for complete product usage guidelines.
 - Find company contact information at the official website under <a href="https://navigine.com/contacts/">Contact</a> tab.
 
-## Navigine Demo Applications
-
-The following sections include short descriptions of the Navigine Demo Applications for iOS and Android operating systems. 
-
-### Android Demo Application
-
-Navigine Demo application for Android enables you to test indoor navigation as well as measure your target location's radiomap.
-
-To get the Navigine demo application for Android,
-
-- Either [download the precompiled APK file](https://github.com/Navigine/Android-SDK/blob/master/Navigine/Navigine-debug.apk).
-- Or compile the application yourself [using sources, available at GitHub](https://github.com/Navigine/Android-SDK/tree/master/Navigine>).
-
-For complete guidelines on using the Demo, refer to the [corresponding sections in the Navigine User Manual](http://docs.navigine.com/ud_android_demo.html), or refer to the Help file incorporated into the application.
-
-### iOS Demo Application
-
-Navigine demo application for iOS enables you to test indoor navigation that you set up using Navigine CMS.
-
-To get the Navigine demo application for iOS, 
-
-- Either find the [Navigine application in the Apple Store](https://itunes.apple.com/ru/app/navigine/id972099798) using your iOS device
-- Or compile the application yourself [using source code, available at GitHub](https://github.com/Navigine/Indoor-navigation-algorithms/tree/master/demo%20apps/ios).
-
-For complete guidelines on using the Demo, refer to the [corresponding sections in the Navigine User Manual](http://docs.navigine.com/ud_ios_demo.html), or refer to the Help file incorporated into the application.
-
 ## Navigine Algorithms
 
 The following sections describe the algorithms implemented in the Navigine products. Refer to the [navigation](https://github.com/Navigine/Indoor-navigation-algorithms/tree/master/navigation) sub-folder for downloads.
@@ -65,7 +39,3 @@ Algorithm with all required functions and data structures is presented as class 
 Example of the algorithm usage and filling of data structures you can find in a unit test for this source code in the test_trilateration.cpp file.
 
 Switch to the [corresponding sub-folder](https://github.com/Navigine/Indoor-navigation-algorithms/tree/master/navigation/trilateteration) for downloads, or just to review the repository contents.
-
-## Navigation SDK
-
-Refer to the [navigation_sdk sub-folder](https://github.com/Navigine/Indoor-navigation-algorithms/tree/master/navigation_SDK/Navigine_iOS_SDK) for header files used for iOS indoor navigation.
