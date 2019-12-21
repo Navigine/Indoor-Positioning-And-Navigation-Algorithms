@@ -14,7 +14,7 @@ Navigine Indoor Location Services is a set of unified tools for indoor marketing
 
 ## Project roadmap for 2020 Q1
 
-# January
+### January
 
 Actualize pedometer project:
 - Code refactoring
@@ -22,14 +22,14 @@ Actualize pedometer project:
 - Add set of comprehensive tests for step-detection estimation.
 - Add brief mathemetical descritpion and references to related scientific articles.
 
-# Feburary
+### Feburary
 
 Add Sensor-fusion project, used for estimation of device heading based on readings from sensors data (magnetometer, accelerometer, gyroscope):
 - Add C++ Code to repository
 - Add set of  tests for heading estimation.
 - Add comprehensive mathemetical description and references to related scientific articles.
 
-# March
+### March
 
 Add project corresponding to positioning method based on signal from nearest radio-transmitter
 - Add C++ Code of nearest-trasmitter-based positioning method
