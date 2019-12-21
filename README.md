@@ -21,7 +21,7 @@ Actualize pedometer project:
 - Add set of comprehensive tests for step-detection estimation.
 - Add brief mathemetical descritpion and references to related scientific articles.
 
-### Feburary
+### Februrary
 
 Add Sensor-fusion project, used for estimation of device heading based on readings from sensors data (magnetometer, accelerometer, gyroscope):
 - Add C++ Code to repository
