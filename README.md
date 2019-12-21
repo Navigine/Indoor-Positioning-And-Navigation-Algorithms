@@ -2,8 +2,7 @@
 
 # Indoor-navigation-algorithms
 
-Here is our public repository with the main focus on indoor navigation algorithms. We’d like to share some useful links, introduce Navigine Demo Applications and Navigine Algorithms.
-Navigine Indoor Location Services is a set of unified tools for indoor marketing, analysis, and tracking purposes. The tools’ application scope includes (and is not limited to) airports, shopping malls, universities, and so on.
+This repository includes a set of different algorithms combined in Navigine core positioning library. The application scope of Navigine positioning library includes (and is not limited to) cases of indoor navigation in airports, shopping malls, universities, and so on.
 
 ## Useful Links
 
