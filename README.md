@@ -1,4 +1,4 @@
-<a href="http://navigine.com"><img src="https://navigine.com/wp-content/themes/flat-theme/assets/images/img/w_menuLogo.svg" align="right" height="60" width="180" hspace="10" vspace="5"></a>
+<a href="http://navigine.com"><img src="https://navigine.com/assets/web/images/logo.svg" align="right" height="60" width="180" hspace="10" vspace="5"></a>
 
 # Indoor-navigation-algorithms
 
