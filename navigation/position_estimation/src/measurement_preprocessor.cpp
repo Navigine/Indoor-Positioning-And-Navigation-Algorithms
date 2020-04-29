@@ -2,8 +2,6 @@
 
 #include "measurement_preprocessor.h"
 
-#include <iostream>
-
 namespace navigine {
 namespace navigation_core {
 
@@ -12,8 +10,8 @@ MeasurementsPreprocessor::MeasurementsPreprocessor()
 {
   mUseBle = false;
   mUseWifi = true;
-  long long sigAverageTime = (long long)(1000 * 2.0);
-  long long sigWindowShift = (long long)(1000 * 1.0);
+  long long sigAverageTime = (long long)(1000 * 3.0);
+  long long sigWindowShift = (long long)(1000 * 2.0);
   if (sigWindowShift == 0 || sigWindowShift > sigAverageTime)
     sigWindowShift = sigAverageTime;
   
@@ -26,17 +24,9 @@ void MeasurementsPreprocessor::update(const RadioMeasurement& msr)
   //if (isSignalTypeSupported(msr.type) && isRssiValid(msr.rssi))
   if (isRssiValid(msr.rssi))
   {
-    std::cout << "fill valid msr " << std::endl;
     std::vector<RadioMeasurement> msrVect;
     msrVect.push_back(msr);
     mRadiosBuffer.addMeasurements(msr.ts, msrVect);
-  }
-  else
-  {
-    std::string type = "WIFI";
-    if (msr.type == RadioMeasurement::Type::BEACON)
-        type = "BEACON";
-    std::cout << "skip invalid msr " << msr.rssi << " " << type << std::endl;
   }
 
   if (msr.ts > mCurrentTs)

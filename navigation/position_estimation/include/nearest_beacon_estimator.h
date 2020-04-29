@@ -3,6 +3,7 @@
 #include <map>
 #include "transmitter.h"
 #include "navigation_structures.h"
+#include "position_smoother.h"
 
 namespace navigine {
 namespace navigation_core {
@@ -17,6 +18,7 @@ public:
 private:
   Point2D getTransmitterPosition(const std::string& txId);
 
+  PositionSmoother m_smoother;
   std::map<std::string, Transmitter> m_transmitters;
 };
 
