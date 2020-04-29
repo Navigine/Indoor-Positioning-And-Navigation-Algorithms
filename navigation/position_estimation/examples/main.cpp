@@ -77,6 +77,7 @@ std::vector<Transmitter> getTransmitters(const std::string& transmittersFileName
   }
   is.close();
 
+  std::cout << "transmitters size: " << transmitters.size() << std::endl;
   return transmitters;
 }
 
@@ -93,12 +94,15 @@ std::vector<RadioMeasurement> getMeasurements(const std::string& msrFileName)
   {
     std::istringstream iss(line);
     RadioMeasurement msr;
+    //TODO parse type!!!
+    msr.type = RadioMeasurement::Type::BEACON;
     if ((iss >> msr.ts >> msr.id >> msr.rssi))
       measurements.emplace_back(msr);
     else
       break;
   }
   is.close();
+  std::cout << "measurements size: " << measurements.size() << std::endl;
   return measurements;
 }
 
@@ -113,6 +117,7 @@ std::vector<RadioMeasurements> splitToPackets(const std::vector<RadioMeasurement
       inputMeasuremetnsPackets.emplace_back(measurementsPacket);
     }
   }
+  std::cout << "measurements packets size: " << inputMeasuremetnsPackets.size() << std::endl;
   return inputMeasuremetnsPackets;
 }
 
@@ -120,7 +125,7 @@ int main()
 {
   std::string testDataFolder = TEST_DATA_FOLDER;
   std::string transmittersFileName = testDataFolder + "transmitters.txt";
-  std::string msrFileName = testDataFolder + "measuremetns.log";
+  std::string msrFileName = testDataFolder + "measurements.log";
   std::string benchFileName = testDataFolder + "benchmarks.log";
   std::string outputFileName = testDataFolder + "output.log";
 

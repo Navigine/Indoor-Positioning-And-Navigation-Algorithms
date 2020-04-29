@@ -31,7 +31,7 @@ struct Position
 
 struct RadioMeasurement
 {
-  enum class Type {WIFI, BEACON, BLUETOOTH, WIFI_RTT};
+  enum class Type {WIFI, BEACON};
 
   Type            type;    
   long long       ts          = 0;
