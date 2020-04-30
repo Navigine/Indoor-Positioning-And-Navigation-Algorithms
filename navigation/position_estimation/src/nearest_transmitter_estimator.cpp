@@ -1,6 +1,6 @@
 #include <cmath>
 #include <algorithm>
-#include "nearest_beacon_estimator.h"
+#include "nearest_transmitter_estimator.h"
 
 namespace navigine {
 namespace navigation_core {
@@ -8,21 +8,30 @@ namespace navigation_core {
 static const double A = -82.0;
 static const double B =  3.0;
 
-NearestBeaconEstimator::NearestBeaconEstimator(const std::vector<Transmitter>& transmitters)
+NearestTransmitterPositionEstimator::NearestTransmitterPositionEstimator(const std::vector<Transmitter>& transmitters)
 {
   m_smoother = PositionSmoother(0.9);
   for (const Transmitter& t: transmitters)
     m_transmitters[t.id] = t;
 }
 
-Position NearestBeaconEstimator::calculatePosition(const RadioMeasurements& radioMeasurements)
+std::vector<RadioMeasurement> NearestTransmitterPositionEstimator::getRegisteredTransmittersMeasurements(
+        const std::vector<RadioMeasurement>& radioMsr)
+{
+  std::vector<RadioMeasurement> registeredMeasurements;
+  for (const RadioMeasurement& msr: radioMsr)
+    if (m_transmitters.find(msr.id) != m_transmitters.end())
+      registeredMeasurements.push_back(msr);
+  return registeredMeasurements;
+}
+
+Position NearestTransmitterPositionEstimator::calculatePosition(const RadioMeasurements& inputMeasurements)
 {
   Position position;
   position.isEmpty = true;
+  std::vector<RadioMeasurement> radioMeasurements = getRegisteredTransmittersMeasurements(inputMeasurements);
   if (radioMeasurements.empty())
     return position;
-
-  //TODO get only registered transmitters
 
   auto nearestTx = std::max_element(radioMeasurements.begin(), radioMeasurements.end(),
         [](RadioMeasurement msr1, RadioMeasurement msr2) {return msr1.rssi < msr2.rssi; });

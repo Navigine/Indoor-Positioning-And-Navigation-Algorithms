@@ -8,14 +8,16 @@
 namespace navigine {
 namespace navigation_core {
 
-class NearestBeaconEstimator
+class NearestTransmitterPositionEstimator
 {
 public:
-  NearestBeaconEstimator(const std::vector<Transmitter>& transmitters);
+  NearestTransmitterPositionEstimator(const std::vector<Transmitter>& transmitters);
 
-  Position calculatePosition(const RadioMeasurements& radioMsr);
+  Position calculatePosition(const RadioMeasurements& inputMeasurements);
 
 private:
+  std::vector<RadioMeasurement> getRegisteredTransmittersMeasurements(
+        const std::vector<RadioMeasurement>& radioMsr);
   Point2D getTransmitterPosition(const std::string& txId);
 
   PositionSmoother m_smoother;

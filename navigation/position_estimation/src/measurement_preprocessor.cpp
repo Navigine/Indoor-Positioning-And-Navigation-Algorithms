@@ -5,13 +5,18 @@
 namespace navigine {
 namespace navigation_core {
 
-MeasurementsPreprocessor::MeasurementsPreprocessor()
-    : mCurrentTs(-1)
+MeasurementsPreprocessor::MeasurementsPreprocessor(double sigAverageTimeSec,
+                                                   double sigWindowShiftSec,
+                                                   bool useWifi,
+                                                   bool useBle)
+    : mCurrentTs         ( -1 )
+    , mSigAverageTimeSec ( sigAverageTimeSec )
+    , mSigWindowShiftSec ( sigWindowShiftSec )
+    , mUseWifi           ( useWifi )
+    , mUseBle            ( useBle )
 {
-  mUseBle = false;
-  mUseWifi = true;
-  long long sigAverageTime = (long long)(1000 * 3.0);
-  long long sigWindowShift = (long long)(1000 * 2.0);
+  long long sigAverageTime = (long long)(1000 * mSigAverageTimeSec);
+  long long sigWindowShift = (long long)(1000 * mSigWindowShiftSec);
   if (sigWindowShift == 0 || sigWindowShift > sigAverageTime)
     sigWindowShift = sigAverageTime;
   
@@ -21,8 +26,7 @@ MeasurementsPreprocessor::MeasurementsPreprocessor()
 
 void MeasurementsPreprocessor::update(const RadioMeasurement& msr)
 {
-  //if (isSignalTypeSupported(msr.type) && isRssiValid(msr.rssi))
-  if (isRssiValid(msr.rssi))
+  if (isSignalTypeSupported(msr.type) && isRssiValid(msr.rssi))
   {
     std::vector<RadioMeasurement> msrVect;
     msrVect.push_back(msr);
@@ -58,8 +62,8 @@ long long MeasurementsPreprocessor::getCurrentTs() const
 
 bool MeasurementsPreprocessor::isSignalTypeSupported(RadioMeasurement::Type signalType) const
 {
-  return (signalType == RadioMeasurement::Type::WIFI      && mUseWifi) ||
-         (signalType == RadioMeasurement::Type::BEACON    && mUseBle);
+  return (signalType == RadioMeasurement::Type::WIFI && mUseWifi) ||
+         (signalType == RadioMeasurement::Type::BEACON && mUseBle);
 }
 
 bool MeasurementsPreprocessor::isRssiValid(double rssi) const
@@ -92,7 +96,6 @@ void RadioMeasurementBuffer::addMeasurements(long long messageTs, const std::vec
     if (radioMsr.ts > mLastExtractionTs)
       mMeasurements.push_back(radioMsr);
 
-    // TODO: check why few metrics change if we just set mCurrentTs = messageTs;
     mCurrentTs = std::max(radioMsr.ts, mCurrentTs);
   }
 }

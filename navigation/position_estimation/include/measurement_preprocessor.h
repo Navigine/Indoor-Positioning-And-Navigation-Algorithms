@@ -30,7 +30,10 @@ private:
 class MeasurementsPreprocessor
 {
   public:
-    MeasurementsPreprocessor();
+    MeasurementsPreprocessor(double sigAverageTimeSec = 3.0,
+                             double sigWindowShiftSec = 2.0,
+                             bool useWifi = true,
+                             bool useBle = true);
 
     void                           update(const RadioMeasurement &msr);
     long long                      getCurrentTs() const;
@@ -42,13 +45,14 @@ class MeasurementsPreprocessor
 
   private:
     RadioMeasurementBuffer    mRadiosBuffer;
-    double                    mCutOffRssi      = -100;
-    bool                      mUseWifi         = true;
-    bool                      mUseBle          = true;
-    long long                 mCurrentTs       = -1;
-    bool                      mUseClosestAps   = true;
-    int                       mNumClosestAps   = 5;
-    std::string               mMeasurementType = "";
+    double                    mCutOffRssi        = -100;
+    long long                 mCurrentTs         = -1;
+    double                    mSigAverageTimeSec = 3.0;
+    double                    mSigWindowShiftSec = 2.0;
+    bool                      mUseWifi           = true;
+    bool                      mUseBle            = true;
+    bool                      mUseClosestAps     = true;
+    int                       mNumClosestAps     = 5;
 };
 
 } } // namespace navigine::navigation_core

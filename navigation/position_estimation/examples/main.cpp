@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include "measurement_preprocessor.h"
-#include "nearest_beacon_estimator.h"
+#include "nearest_transmitter_estimator.h"
 
 using namespace navigine::navigation_core;
 
@@ -24,32 +24,6 @@ struct NavigationPoint
   double    angle       = 0;
   int       sublocation = 0;
 };
-
-std::vector<NavigationPoint> getReferenceData(const std::string &filename)
-{
-  double x = 0., y = 0., t = 0., fi = 0.;
-  int subloc = 0;
-  std::ifstream infile(filename);
-  if (!infile.is_open())
-  {
-    std::cout << "ERROR: can't open reference file: " << filename << std::endl;
-    return std::vector<NavigationPoint>();
-  }
-
-  std::vector<NavigationPoint> navPoints;
-  std::string line;
-  while (std::getline(infile, line))
-  {
-    if (line.find("#") != 0){ //ignore comments
-      std::istringstream iss(line);
-      iss >> x >> y >> t >> fi >> subloc;
-      long long ts = 1000 * t;
-      navPoints.push_back({ts, x, y, fi, subloc});
-    }
-  }
-  infile.close();
-  return navPoints;
-}
 
 std::vector<Transmitter> getTransmitters(const std::string& transmittersFileName)
 {
@@ -94,10 +68,16 @@ std::vector<RadioMeasurement> getMeasurements(const std::string& msrFileName)
   {
     std::istringstream iss(line);
     RadioMeasurement msr;
-    //TODO parse type!!!
-    msr.type = RadioMeasurement::Type::BEACON;
-    if ((iss >> msr.ts >> msr.id >> msr.rssi))
+    std::string typeStr;
+    if ((iss >> msr.ts >> msr.id >> msr.rssi >> typeStr))
+    {
+      if (typeStr.find("WIFI") == std::string::npos)
+        msr.type = RadioMeasurement::Type::BEACON;
+      else
+        msr.type = RadioMeasurement::Type::WIFI;
+
       measurements.emplace_back(msr);
+    }
     else
       break;
   }
@@ -126,16 +106,13 @@ int main()
   std::string testDataFolder = TEST_DATA_FOLDER;
   std::string transmittersFileName = testDataFolder + "transmitters.txt";
   std::string msrFileName = testDataFolder + "measurements.log";
-  std::string benchFileName = testDataFolder + "benchmarks.log";
   std::string outputFileName = testDataFolder + "output.log";
 
   std::vector<Transmitter> transmitters = getTransmitters(transmittersFileName);
   std::vector<RadioMeasurement> inputMeasuremetns = getMeasurements(msrFileName);
-  std::vector<NavigationPoint> benchmarkPoints = getReferenceData(benchFileName);
-
   std::vector<RadioMeasurements> inputMeasuremetnsPackets = splitToPackets(inputMeasuremetns);
 
-  NearestBeaconEstimator nearestBeaconPositionEstimator = NearestBeaconEstimator(transmitters);
+  NearestTransmitterPositionEstimator nearestBeaconPositionEstimator = NearestTransmitterPositionEstimator(transmitters);
 
   std::ofstream os;
   os.open(outputFileName);
