@@ -11,26 +11,25 @@ This repository includes a set of different algorithms combined in Navigine core
 - Refer to the Navigine [User Manual](http://docs.navigine.com/) for complete product usage guidelines.
 - Find company contact information at the official website under [Contacts](https://navigine.com/contacts/) tab.
 
-## Project roadmap for 2020 Q1
+## Project roadmap for 2020 Q3
 
-### February 2020
+### June-July 2020
 
-Actualize pedometer project:
-- Code refactoring
-- Get rid of Visual Studio project files.
-- Add set of comprehensive tests for step-detection estimation.
-- Add brief mathemetical descritpion and references to related scientific articles.
+Add the project with all used data structures required for positioning:
+- Prepare and add the code for the data structure block
+- Add documentation
+- Add examples of how all the structures are created
 
-### March 2020
 
-Add Sensor-fusion project, used for estimation of device heading based on readings from sensors data (magnetometer, accelerometer, gyroscope):
+### August 2020
+
+Add positioning block utilizing simple positioning algorithm and all the processing blocks:
 - Add C++ Code to repository
-- Add set of  tests for heading estimation.
-- Add comprehensive mathemetical description and references to related scientific articles.
+- Add set of  tests for position estimation
+- Add comprehensive  documentation and references to related scientific articles.
 
-### April 2020
+### Septebmer 2020
 
-Add project corresponding to positioning method based on signal from nearest radio-transmitter
-- Add C++ Code of nearest-trasmitter-based positioning method
-- Add C++ Code of alpha-betta filter
-- Add set of tests for position estimation.
+Add optional positioning algorithms to be used in core positioning block
+- Add C++ Code
+- Add set of tests for position estimation
