@@ -7,14 +7,12 @@ To describe the indoor environment we propose the API of indoor positioning algo
 
 Any indoor space, such as building or warehouse is further referred to as `Location` and is represented by a set of 2D (plane) areas called `Level`'s. A typical example of `Location` is a multistored building, where each `Level`s corresponds to one of the floors of the building.
 
-![location_small](illustrations/Location.png)
-
+![Alt text](illustrations/Location.jpg?raw=true "Location")
 [Figure 1. Location with levels]
 
 Each `Level` is specified by all the data, necessary to calculate position on this `Level`. This data includes: geometry of the `Level` (walls, open/closed areas, bounding box), route graph (information about available routes on this `Level`), list of installed devices, called `Transmitters` (bluetooth beacons, wifi base stations, etc) and collected radio map (if present) that is called RSSI fingerprints [1, 2]. All these pieces of data will be described below.
 
-![level](illustrations/Level.png)
-
+![Alt text](illustrations/Level.jpg?raw=true "Level")
 [Figure 2. The scheme of the level]
 
 All these infrastructure is described in the following struct:
