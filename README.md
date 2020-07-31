@@ -4,6 +4,7 @@
 
 This repository includes a set of different algorithms combined in Navigine core positioning library. The application scope of Navigine positioning library includes (and is not limited to) cases of indoor navigation in airports, shopping malls, universities, and so on.
 
+
 ## Useful Links
 
 - Refer to the [Navigine official website](https://navigine.com/) for complete list of downloads, useful materials, information about the company, and so on.
@@ -19,6 +20,7 @@ Add the project with all used data structures required for positioning:
 - Prepare and add the code for the data structure block
 - Add documentation
 - Add examples of how all the structures are created
+
 
 
 ### August 2020
