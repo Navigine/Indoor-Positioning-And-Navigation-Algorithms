@@ -44,7 +44,7 @@ std::vector<Transmitter> getTransmitters(const std::string& transmittersFileName
       t.type = typeStr.find("WIFI") == std::string::npos
               ? Transmitter::Type::BEACON
               : Transmitter::Type::WIFI;
-      transmitters.emplace_back(t);
+      transmitters.push_back(t);
     }
     else
       break;
@@ -76,7 +76,7 @@ std::vector<RadioMeasurement> getMeasurements(const std::string& msrFileName)
       else
         msr.type = RadioMeasurement::Type::WIFI;
 
-      measurements.emplace_back(msr);
+      measurements.push_back(msr);
     }
     else
       break;
