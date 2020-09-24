@@ -1,3 +1,4 @@
+#include <numeric>
 #include <algorithm>
 
 #include "measurement_preprocessor.h"
