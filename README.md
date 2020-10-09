@@ -12,25 +12,16 @@ This repository includes a set of different algorithms combined in Navigine core
 - Refer to the Navigine [User Manual](http://docs.navigine.com/) for complete product usage guidelines.
 - Find company contact information at the official website under [Contacts](https://navigine.com/contacts/) tab.
 
-## Project roadmap for 2020 Q3
+## Project roadmap for 2020 Q4
 
-### June-July 2020
-
-Add the project with all used data structures required for positioning:
-- Prepare and add the code for the data structure block
-- Add documentation
-- Add examples of how all the structures are created
-
-
-
-### August 2020
+### October-November 2020
 
 Add positioning block utilizing simple positioning algorithm and all the processing blocks:
 - Add C++ Code to repository
 - Add set of  tests for position estimation
 - Add comprehensive  documentation and references to related scientific articles.
 
-### Septebmer 2020
+### December 2020
 
 Add optional positioning algorithms to be used in core positioning block
 - Add C++ Code
