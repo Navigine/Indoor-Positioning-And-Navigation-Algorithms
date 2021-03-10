@@ -26,3 +26,11 @@ Add positioning block utilizing simple positioning algorithm and all the process
 Add optional positioning algorithms to be used in core positioning block
 - Add C++ Code
 - Add set of tests for position estimation
+
+
+### April 2021
+
+Add first version on indoor navigation algorithms
+- Add C++ basic code
+- Add set of tests for algorithms
+
