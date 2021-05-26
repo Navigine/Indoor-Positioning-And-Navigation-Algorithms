@@ -34,3 +34,6 @@ Add first version on indoor navigation algorithms
 - Add C++ basic code
 - Add set of tests for algorithms
 
+### May 2021
+
+- Upfload first version of navgine navigation library
