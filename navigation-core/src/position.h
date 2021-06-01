@@ -1,7 +1,6 @@
 /** position.h
  *
- * Author: Aleksandr Galov <asgalov@gmail.com>
- * Copyright (c) 2018 Navigine. All rights reserved.
+ * Copyright (c) 2018 Navigine.
  *
  */
 

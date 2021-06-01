@@ -1,7 +1,6 @@
 /** navigation_input.h
  *
- * Author: Fedor Puchkov <fedormex@gmail.com>
- * Copyright (c) 2018 Navigine. All rights reserved.
+ * Copyright (c) 2018 Navigine.
  *
  */
 

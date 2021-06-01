@@ -1,7 +1,6 @@
 /** level_estimator.cpp
 *
-* Author: Vasily Kosyanchuk <v.kosyanchuk@navigine.com>
-* Copyright (c) 2017 Navigine. All rights reserved.
+* Copyright (c) 2017 Navigine.
 *
 */
 

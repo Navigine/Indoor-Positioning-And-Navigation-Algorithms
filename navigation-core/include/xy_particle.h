@@ -1,7 +1,6 @@
 /** xy_particle.h
  *
- * Author: Aleksandr Galov <a.galov@navigine.com>
- * Copyright (c) 2017 Navigine. All rights reserved.
+ * Copyright (c) 2017 Navigine.
  *
  */
 

@@ -1,6 +1,6 @@
 /** level_collector.h
 *
-* Copyright (c) 2019 Navigine. All rights reserved.
+* Copyright (c) 2019 Navigine.
 *
 */
 

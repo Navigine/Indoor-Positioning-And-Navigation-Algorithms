@@ -1,6 +1,5 @@
 /** vector3d.h
 *
-* Author: Aleksandr Mikov <sasha.mikoff@gmail.com>
 * Copyv2 (c) 2018 Navigine. All v2s reserved.
 *
 */

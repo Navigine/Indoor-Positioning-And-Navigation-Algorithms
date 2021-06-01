@@ -1,7 +1,6 @@
 /** navigation_test.cpp
  *
- * Author: Fedor Puchkov <fedormex@gmail.com>
- * Copyright (c) 2014 Navigine. All rights reserved.
+ * Copyright (c) 2014 Navigine.
  *
  */ 
 

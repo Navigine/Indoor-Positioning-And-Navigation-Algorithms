@@ -1,7 +1,6 @@
 /** barometer.h
  *
- * Author: Mihail Doroshenko <m.doroshenko@navigine.com>
- * Copyright (c) 2018 Navigine. All rights reserved.
+ * Copyright (c) 2018 Navigine.
  *
  */
 

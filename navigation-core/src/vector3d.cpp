@@ -1,7 +1,6 @@
 /** vector3d.cpp
 *
-* Author: Aleksandr Mikov <sasha.mikoff@gmail.com>
-* Copyright (c) 2018 Navigine. All rights reserved.
+* Copyright (c) 2018 Navigine.
 *
 */
 
