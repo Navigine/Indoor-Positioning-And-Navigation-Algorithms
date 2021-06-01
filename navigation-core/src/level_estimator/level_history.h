@@ -1,7 +1,6 @@
 /** level_history.h
  *
- * Author: Aleksandr Galov <asgalov@gmail.com>
- * Copyright (c) 2017 Navigine. All rights reserved.
+ * Copyright (c) 2017 Navigine.
  *
  */
 

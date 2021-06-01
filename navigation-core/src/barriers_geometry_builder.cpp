@@ -1,7 +1,6 @@
 /** barriers_geometry_builder.cpp
  *
- * Author: Vasiliy Kosyanchuk <v.kosyanchuk@navigine.com>
- * Copyright (c) 2019 Navigine. All rights reserved.
+ * Copyright (c) 2019 Navigine.
  *
  */
 #include <iostream>
