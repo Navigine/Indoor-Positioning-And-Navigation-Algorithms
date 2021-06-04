@@ -33,6 +33,7 @@ target_include_directories("${target}" PRIVATE
   "tests/include/"
   "tests/build/"
   "include/")
+set_property(TARGET "${target}" PROPERTY CXX_STANDARD 17)
 set_target_properties("${target}" PROPERTIES COMPILE_DEFINITIONS "BUILD_FOR_LINUX;_DEBUG;")
 set_target_properties("${target}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing -funwind-tables -fPIC -pipe -m64 -march=x86-64 -fstack-protector-strong -pthread -O3 -fno-omit-frame-pointer -g2 -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=c++17 -frtti -fexceptions ")
 set_target_properties("${target}" PROPERTIES LINK_FLAGS "-Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -m64 -pthread -Wl,-rpath=$ORIGIN -Wl,-rpath-link=. -Wl,--disable-new-dtags ")
@@ -77,6 +78,7 @@ add_library("${target}" STATIC ${${target}__cxx_srcs})
 target_include_directories("${target}" PRIVATE
   "include/"
   "tests/build/")
+set_property(TARGET "${target}" PROPERTY CXX_STANDARD 17)
 set_target_properties("${target}" PROPERTIES COMPILE_DEFINITIONS "BUILD_FOR_LINUX;_DEBUG;")
 set_target_properties("${target}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing -funwind-tables -fPIC -pipe -m64 -march=x86-64 -fstack-protector-strong -pthread -O3 -fno-omit-frame-pointer -g2 -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=c++17 -frtti -fexceptions ")
 set_target_properties("${target}" PROPERTIES LINK_FLAGS "-Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -m64 -pthread ")
