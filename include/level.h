@@ -12,7 +12,6 @@
 #include <map>
 #include <unordered_map>
 
-#include "boost_geometry_adaptation.h"
 #include "level_geometry.h"
 #include "transmitter.h"
 #include "navigation_input.h"
