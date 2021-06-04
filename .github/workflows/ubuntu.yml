@@ -11,6 +11,9 @@ jobs:
   ci_test_clang:
     runs-on: ubuntu-latest
     steps:
+        # install dependencies
+      - name: boost
+        run: sudo apt-get update && sudo apt-get install -yq libboost1.65-dev
       - uses: actions/checkout@v2
       - name: install_ninja
         run: |
@@ -33,6 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        # install dependencies
+      - name: boost
+        run: sudo apt-get update && sudo apt-get install -yq libboost1.65-dev
       - name: cmake
         run: cmake -S . -B build -DJSON_CI=On
       - name: build
@@ -42,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: boost
+        run: sudo apt-get update && sudo apt-get install -yq libboost1.65-dev
       - name: cmake
         run: cmake -S . -B build -DJSON_CI=On
       - name: build

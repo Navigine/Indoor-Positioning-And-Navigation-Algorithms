@@ -17,34 +17,10 @@ set(BOOST_ENABLE_CMAKE ON)
 set(Boost_USE_STATIC_LIBS ON)
 
 find_package(Boost)
-IF (Boost_FOUND)
+IF (Boost_FOUND REQUIRED)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
     message(${Boost_INCLUDE_DIR})
     include_directories(${Boost_SOURCE_DIR})
-ELSE ()
-  FetchContent_Declare(Boost
-    GIT_REPOSITORY git@github.com:boostorg/boost.git
-    GIT_TAG        origin/master
-  )
-
-  message(STATUS "Getting Boost... (this can take a few minutes to download)")
-  FetchContent_MakeAvailable(Boost)
-  message(STATUS "Got Boost! ${Boost_SOURCE_DIR}")
-
-  include_directories(${Boost_SOURCE_DIR})
-
-  set(Boost_DIR "${Boost_BINARY_DIR}")
-
-  set(Boost_USE_STATIC_LIBS ON)  # only find static libs
-  set(Boost_USE_DEBUG_LIBS ON)  # ignore debug libs and
-  set(Boost_USE_RELEASE_LIBS OFF)  # only find release libs
-  set(Boost_USE_MULTITHREADED ON)
-  set(Boost_USE_STATIC_RUNTIME OFF)
-
-  find_package(Boost CONFIG REQUIRED
-    COMPONENTS geometry
-    )
-  message(STATUS "Boost version: ${Boost_VERSION}")
 ENDIF ()
 
 #tests:navigation_test
