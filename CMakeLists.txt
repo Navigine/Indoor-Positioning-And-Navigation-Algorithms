@@ -16,7 +16,7 @@ endif()
 set(BOOST_ENABLE_CMAKE ON)
 set(Boost_USE_STATIC_LIBS ON)
 
-find_package(Boost REQUIRED)
+find_package(Boost)
 IF (Boost_FOUND)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
     message(${Boost_INCLUDE_DIR})
