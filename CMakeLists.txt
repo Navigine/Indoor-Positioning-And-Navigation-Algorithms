@@ -36,7 +36,7 @@ target_include_directories("${target}" PRIVATE
 set_property(TARGET "${target}" PROPERTY CXX_STANDARD 17)
 set_target_properties("${target}" PROPERTIES COMPILE_DEFINITIONS "BUILD_FOR_LINUX;_DEBUG;")
 set_target_properties("${target}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing -funwind-tables -fPIC -pipe -m64 -march=x86-64 -fstack-protector-strong -pthread -O3 -fno-omit-frame-pointer -g2 -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=c++17 -frtti -fexceptions ")
-set_target_properties("${target}" PROPERTIES LINK_FLAGS "-Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -m64 -pthread -Wl,-rpath=$ORIGIN -Wl,-rpath-link=. -Wl,--disable-new-dtags ")
+set_target_properties("${target}" PROPERTIES LINK_FLAGS "-Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -m64 -pthread -Wl,-rpath=$ORIGIN -Wl,-rpath-link=. -Wl,--disable-new-dtags ")
 target_link_libraries("${target}" PRIVATE
   "navigation-core"
   nlohmann_json::nlohmann_json)
@@ -81,5 +81,5 @@ target_include_directories("${target}" PRIVATE
 set_property(TARGET "${target}" PROPERTY CXX_STANDARD 17)
 set_target_properties("${target}" PROPERTIES COMPILE_DEFINITIONS "BUILD_FOR_LINUX;_DEBUG;")
 set_target_properties("${target}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing -funwind-tables -fPIC -pipe -m64 -march=x86-64 -fstack-protector-strong -pthread -O3 -fno-omit-frame-pointer -g2 -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=c++17 -frtti -fexceptions ")
-set_target_properties("${target}" PROPERTIES LINK_FLAGS "-Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -m64 -pthread ")
+set_target_properties("${target}" PROPERTIES LINK_FLAGS "-Wl,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -m64 -pthread ")
 target_link_libraries("${target}" PRIVATE nlohmann_json::nlohmann_json)
