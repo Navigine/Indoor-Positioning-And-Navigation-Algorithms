@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
         # install dependencies
       - name: boost
-        run: sudo apt-get update && sudo apt-get install libboost-all-dev
+        run: brew install boost 
       - name: cmake
         run: cmake -S . -B build -D CMAKE_BUILD_TYPE=Debug -DJSON_BuildTests=On -DJSON_FastTests=ON
       - name: build
