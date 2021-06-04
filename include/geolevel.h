@@ -13,7 +13,6 @@
 #include <unordered_map>
 
 #include "level_geometry.h"
-#include "boost_geometry_adaptation.h"
 #include "transmitter.h"
 
 namespace navigine {

@@ -13,7 +13,6 @@
 #include <unordered_map>
 #include <boost/optional.hpp>
 
-#include "boost_geometry_adaptation.h"
 #include "level.h"
 #include "geolevel.h"
 #include "transmitter.h"

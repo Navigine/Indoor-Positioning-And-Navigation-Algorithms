@@ -1,0 +1,45 @@
+name: Ubuntu
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+  pull_request:
+
+jobs:
+  ci_test_clang:
+    runs-on: ubuntu-latest
+    steps:
+        # install dependencies
+      - name: boost
+        run: sudo apt-get update && sudo apt-get install libboost-all-dev
+      - uses: actions/checkout@v2
+      - name: install_ninja
+        run: |
+          sudo apt update
+          sudo apt install ninja-build
+        shell: bash
+      - name: install_clang
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 11
+          sudo apt-get install clang-tools-11
+        shell: bash
+      - name: cmake
+        run: cmake -S . -B build -DJSON_CI=On
+      - name: build
+        run: cmake --build build
+
+  ci_test_gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        # install dependencies
+      - name: boost
+        run: sudo apt-get update && sudo apt-get install libboost-all-dev
+      - name: cmake
+        run: cmake -S . -B build -DJSON_CI=On
+      - name: build
+        run: cmake --build build

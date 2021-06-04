@@ -1,4 +1,5 @@
 #include <navigation_input.h>
+#include <nlohmann/json.hpp>
 
 #include <algorithm>
 #include <iostream>
@@ -10,7 +11,6 @@
 #include "helpers.h"
 #include "../../include/barriers_geometry_builder.h"
 #include "../../src/navigation_error_codes.h"
-#include "../../extlibs/nlohmann/json.hpp"
 
 using namespace navigine::navigation_core;
 
