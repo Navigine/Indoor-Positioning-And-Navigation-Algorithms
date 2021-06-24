@@ -6,7 +6,7 @@
 #include <memory>
 #include <sstream>
 
-#include "level.h"
+#include <navigine/navigation-core/level.h>
 
 namespace navigine {
 namespace navigation_core {
@@ -40,7 +40,7 @@ struct CommonSettings {
     double sigWindowShift         = 0.0;              // "Sig_window_shift"
     SignalsToUse signalsToUse     = SignalsToUse::BLE; // "Use_Signals"
 
-    unsigned int numParticles             = 1000;    // "N_particles_location_change"
+    unsigned int numParticles             = 1000;    // "N_particles"
     unsigned int minMsrNumForMutation     = 3;       // "Min_msr_num_for_mutation"
     double resamplingThreshold            = 600.0;   // "Resampling_threshold_num", Level
     unsigned int minNumParticlesAlive     = 100;     // "Min_num_of_particles", Level

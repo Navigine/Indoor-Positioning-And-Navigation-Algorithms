@@ -7,7 +7,7 @@
 #ifndef NAVIGINE_PARTICLE_H
 #define NAVIGINE_PARTICLE_H
 
-#include <point.h>
+#include <navigine/navigation-core/point.h>
 
 namespace navigine {
 namespace navigation_core {

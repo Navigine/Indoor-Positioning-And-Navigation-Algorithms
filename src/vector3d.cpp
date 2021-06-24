@@ -1,11 +1,11 @@
 /** vector3d.cpp
 *
-* Copyright (c) 2018 Navigine.
+** Copyright (c) 2018 Navigine.
 *
 */
 
 #include <limits>
-#include <vector3d.h>
+#include <navigine/navigation-core/vector3d.h>
 
 namespace navigine {
 namespace navigation_core {

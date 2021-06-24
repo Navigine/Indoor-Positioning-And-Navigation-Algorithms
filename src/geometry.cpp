@@ -1,5 +1,4 @@
 #include <cmath>
-
 #include "geometry.h"
 
 namespace navigine {

@@ -4,7 +4,7 @@
  *
  */
 
-#include <level.h>
+#include <navigine/navigation-core/level.h>
 
 namespace navigine {
 namespace navigation_core {
@@ -17,6 +17,16 @@ const GeoPoint& Level::bindingPoint() const
 const LevelId& Level::id() const
 {
   return mId;
+}
+
+const Radiomap &Level::radiomap() const
+{
+  return mRadiomap;
+}
+
+const Graph<XYPoint>& Level::graph() const
+{
+  return mGraph;
 }
 
 const LevelGeometry& Level::geometry() const
@@ -38,6 +48,17 @@ void Level::addTransmitters(const XYZTransmitters& transmitters)
 {
   for (const Transmitter<XYZPoint>& tx: transmitters)
     mTransmitters.insert({tx.id, tx});
+}
+
+//TODO after second call should reference points be added to existed or replaced?
+void Level::setReferencePoints(const XYReferencePoints& referencePoints)
+{
+  mRadiomap = Radiomap(referencePoints);
+}
+
+void Level::setGraph(const Graph<XYPoint>& graph)
+{
+  mGraph = graph;
 }
 
 void Level::setGeometry(const LevelGeometry& levelGeometry)

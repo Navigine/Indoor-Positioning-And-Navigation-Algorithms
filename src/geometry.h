@@ -7,7 +7,7 @@
 #ifndef NAVIGINE_GEOMETRY_H
 #define NAVIGINE_GEOMETRY_H
 
-#include "location_point.h"
+#include <navigine/navigation-core/location_point.h>
 
 namespace navigine {
 namespace navigation_core {

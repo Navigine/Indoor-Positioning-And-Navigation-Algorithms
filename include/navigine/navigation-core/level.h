@@ -12,7 +12,11 @@
 #include <map>
 #include <unordered_map>
 
+#include "boost_geometry_adaptation.h"
 #include "level_geometry.h"
+#include "graph.h"
+#include "radiomap.h"
+#include "reference_point.h"
 #include "transmitter.h"
 #include "navigation_input.h"
 
@@ -30,6 +34,8 @@ public:
   {}
 
   void addTransmitters(const XYZTransmitters& transmitters);
+  void setReferencePoints(const XYReferencePoints& referencePoints);
+  void setGraph(const Graph<XYPoint>& graph);
   void setGeometry(const LevelGeometry &levelGeometry);
 
   const LevelId& id() const;
@@ -38,6 +44,8 @@ public:
   bool containsTransmitter(const TransmitterId& txId) const;
   const Transmitter<XYZPoint>& transmitter(const TransmitterId& txId) const;
 
+  const Radiomap& radiomap() const;
+  const Graph<XYPoint>& graph() const;
   const LevelGeometry& geometry() const;
 
 private:
@@ -45,7 +53,9 @@ private:
   const GeoPoint mBindingPoint;
 
   std::unordered_map<TransmitterId, Transmitter<XYZPoint>, HasherTransmitterId> mTransmitters;
+  Radiomap mRadiomap;
   LevelGeometry mGeometry;
+  Graph<XYPoint> mGraph;
 };
 
 typedef std::vector<std::unique_ptr<Level> >::const_iterator LevelIterator;

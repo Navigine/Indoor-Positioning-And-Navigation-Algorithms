@@ -121,9 +121,9 @@ void MeasurementsPreprocessor::operator()(const NmeaMeasurementData& measurement
   mNmea.ts = mCurrentTs;
 }
 
-RadioMeasurementsData MeasurementsPreprocessor::extractRadioMeasurements()
+RadioMeasurementsData MeasurementsPreprocessor::extractRadioMeasurements(long long lastStepTime)
 {
-  RadioMeasurementsData radioMeasurements = mRadiosBuffer.extractMeasurements();
+  RadioMeasurementsData radioMeasurements = mRadiosBuffer.extractMeasurements(lastStepTime);
   if (mUseClosestAps)
   {
     std::sort(radioMeasurements.rbegin(), radioMeasurements.rend(),
@@ -231,6 +231,7 @@ RadioMeasurementBuffer::RadioMeasurementBuffer(
   , mUseStops(useStops)
   , mLastExtractionTs(0)
   , mCurrentTs(0)
+  , mLastStepTs(0)
 { }
 
 void RadioMeasurementBuffer::addMeasurement(const RadioMeasurement& msr)
@@ -248,9 +249,12 @@ void RadioMeasurementBuffer::addMeasurement(const RadioMeasurement& msr)
   mCurrentTs = msr.ts;
 }
 
-RadioMeasurementsData RadioMeasurementBuffer::extractMeasurements()
+RadioMeasurementsData RadioMeasurementBuffer::extractMeasurements(long long lastStepTs)
 {
   RadioMeasurementsData measurements;
+
+  if (lastStepTs > 0)
+    mLastStepTs = lastStepTs;
 
   if (mCurrentTs - mLastExtractionTs < mSignalWindowShiftMs)
   {
@@ -299,6 +303,11 @@ RadioMeasurementsData RadioMeasurementBuffer::extractMeasurements()
     measurements.push_back(radioMsr.data);
     sameIdFirst = sameIdLast;
   }
+
+
+  // In case we are standing still we don't erase old measurements
+  if (mUseStops & (mLastStepTs > 0) && (mCurrentTs - mLastStepTs > mStopDetectionTimeMs))
+    return measurements;
 
   // Erasing old measurements
   if (mRadioKeepPeriodMs == 0)

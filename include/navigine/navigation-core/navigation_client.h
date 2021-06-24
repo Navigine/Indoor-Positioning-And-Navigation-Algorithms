@@ -2,6 +2,7 @@
 
 #include "navigation_input.h"
 #include "navigation_output.h"
+#include "navigation_state.h"
 #include "navigation_settings.h"
 #include "level_collector.h"
 
@@ -11,6 +12,9 @@ namespace navigation_core {
 class NavigationClient
 {
   public:
+    // Return navigation state of this client
+    virtual std::vector<NavigationState> getStates() const = 0;
+
     // Main navigation function. Calculates current position based on incoming measurements
     virtual std::vector<NavigationOutput> navigate(const std::vector<Measurement>& navInput) = 0;
 

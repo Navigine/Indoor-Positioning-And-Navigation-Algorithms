@@ -1,4 +1,4 @@
-#include <navigation_input.h>
+#include <navigine/navigation-core/navigation_input.h>
 #include <nlohmann/json.hpp>
 
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 #include "helpers.h"
-#include "../../include/barriers_geometry_builder.h"
+#include <navigine/navigation-core/barriers_geometry_builder.h>
 #include "../../src/navigation_error_codes.h"
 
 using namespace navigine::navigation_core;
@@ -163,7 +163,7 @@ static void from_json(const nlohmann::json& j, CommonSettings& commonSettings)
       else if (key == "Use_Signals")
         j.at(key).get_to(commonSettings.signalsToUse);
 
-      else if (key == "N_particles_location_change")
+      else if (key == "N_particles")
         j.at(key).get_to(commonSettings.numParticles);
       else if (key == "Min_msr_num_for_mutation")
         j.at(key).get_to(commonSettings.minMsrNumForMutation);
@@ -379,6 +379,84 @@ int getVertex(const GeoPoint& firstPoint, const std::unordered_map<int, GeoPoint
   return -1;
 }
 
+std::pair<LevelId, Graph<GeoPoint>> parseGraph(const nlohmann::json& j)
+{
+  auto propertiesJson = j.at("properties");
+  std::string levelId = propertiesJson.at("level");
+  auto geometryJson = j.at("geometry");
+  auto coordinatesJson = geometryJson.at("coordinates");
+  std::vector<GeoPoint> allPoints;
+  std::vector<std::vector<GeoPoint>> edgesPoints;
+  for (const auto& lineJson: coordinatesJson)
+  {
+    std::vector<GeoPoint> points;
+    for (const auto& pointJson: lineJson)
+    {
+      std::vector<double> pointCoordinates;
+      pointJson.get_to(pointCoordinates);
+      //geojson has longitude:latitude format
+      GeoPoint geoPoint(pointCoordinates.at(1), pointCoordinates.at(0));
+      points.push_back(geoPoint);
+      allPoints.push_back(geoPoint);
+    }
+    edgesPoints.push_back(points);
+  }
+
+  int v = 0;
+  std::unordered_map<int, GeoPoint> vertexMap;
+  while (!allPoints.empty())
+  {
+    v++;
+    GeoPoint p = removeSame(allPoints);
+    vertexMap[v] = p;
+  }
+
+  std::map<int, std::set<int>> adjset;
+  for (std::vector<GeoPoint>& edge: edgesPoints)
+  {
+    assert(edge.size() == 2);
+    GeoPoint p1 = edge[0];
+    int v1 = getVertex(p1, vertexMap);
+    GeoPoint p2 = edge[1];
+    int v2 = getVertex(p2, vertexMap);
+
+    if (adjset.find(v1) == adjset.end())
+      adjset[v1] = std::set<int>();
+    adjset[v1].insert(v2);
+
+    if (adjset.find(v2) == adjset.end())
+      adjset[v2] = std::set<int>();
+    adjset[v2].insert(v1);
+  }
+
+  Graph<GeoPoint> graph;
+  std::map<int, Graph<GeoPoint>::Vertex> addedVertices;
+  for (auto& it: adjset)
+  {
+    int v1 = it.first;
+    std::set<int> adjacentVertexes = it.second;
+    GeoPoint p1 = vertexMap[v1];
+    Graph<GeoPoint>::Vertex vertex1 = graph.addVertex(p1);
+    addedVertices.insert({v1, vertex1});
+    for (int v2: adjacentVertexes)
+    {
+      if (addedVertices.find(v2) == addedVertices.end())
+      {
+        GeoPoint p2 = vertexMap[v2];
+        Graph<GeoPoint>::Vertex vertex2 = graph.addVertex(p2);
+        addedVertices.insert({v2, vertex2});
+        graph.addEdge(vertex1.id, vertex2.id);
+      }
+      else
+      {
+        Graph<GeoPoint>::Vertex vertex2 = addedVertices[v2];
+        graph.addEdge(vertex1.id, vertex2.id);
+      }
+    }
+  }
+  return std::make_pair(LevelId(levelId), graph);
+}
+
 std::pair<LevelId, Transmitter<GeoPoint3D>> parseTransmitter(nlohmann::json j)
 {
   auto properties = j.at("properties");
@@ -430,6 +508,61 @@ std::pair<LevelId, std::list<Polygon>> parseBarriers(const nlohmann::json& j)
   }
 
   return std::make_pair(LevelId(levelId), levelPolygons);
+}
+
+std::pair<LevelId, ReferencePoint<GeoPoint>> parseReferencePoint(const nlohmann::json& j)
+{
+  auto properties = j.at("properties");
+  std::string levelId = properties.at("level");
+  std::string id = properties.at("uuid");
+  std::vector<double> pointCoordinates;
+  auto geometry = j.at("geometry");
+  geometry.at("coordinates").get_to(pointCoordinates);
+  //geojson has longitude:latitude format
+  GeoPoint geopoint(pointCoordinates.at(1), pointCoordinates.at(0));
+
+  std::map<TransmitterId, SignalStatistics> fingerprints;
+  auto entriesJson = properties.at("entries");
+  for (const auto& entryJson: entriesJson)
+  {
+    std::string bssid = entryJson.at("bssid");
+    TransmitterType sigType;
+    entryJson.at("type").get_to(sigType);
+    std::map<int, int> distribution;
+    for (const auto& valueJson: entryJson.at("value"))
+    {
+      int rssi;
+      int count;
+      valueJson.at("rssi").get_to(rssi);
+      valueJson.at("count").get_to(count);
+      distribution.insert({ rssi, count });
+    }
+    // Compute number of measurements, mean and variance of signal
+    double meanRssi = 0.0;
+    double varianceRssi = 0.0;
+    double sumOfSquares = 0.0;
+    double squaredSum = 0.0;
+    size_t nMeas = 0;
+
+    for (auto const& pair : distribution)
+    {
+      nMeas += pair.second;
+      meanRssi += (-pair.first) * pair.second;
+      sumOfSquares += pair.second * pair.first * pair.first;
+      squaredSum += pair.second * pair.first;
+    }
+    meanRssi /= nMeas;
+    squaredSum *= squaredSum;
+
+    SignalStatistics sigStat;
+    sigStat.mean = meanRssi;
+    sigStat.variance = varianceRssi;
+    sigStat.nMeasurements = nMeas;
+    sigStat.type = sigType;
+    fingerprints.insert({TransmitterId(bssid), sigStat});
+  }
+
+  return std::make_pair(LevelId(levelId), ReferencePoint<GeoPoint>(ReferencePointId(id), geopoint, fingerprints));
 }
 
 std::pair<LevelId, std::list<Polygon>> parseLevel(const nlohmann::json& j)
@@ -485,11 +618,18 @@ GeoLevels ParseGeojson(const std::string& jsonFile, int& errorCode)
 
   std::map<LevelId, std::list<Polygon>> barriers;
   std::map<LevelId, Geo3DTransmitters> transmitters;
+  std::map<LevelId, Graph<GeoPoint>> graphs;
+  std::map<LevelId, GeoReferencePoints> referencePoints;
 
   for (const auto& feature: features)
   {
     auto featureProperties = feature.at("properties");
     std::string featureType = featureProperties.at("type");
+    if (featureType == "graph")
+    {
+      std::pair<LevelId, Graph<GeoPoint>> graphPair = parseGraph(feature);
+      graphs.insert(graphPair);
+    }
 
     if (featureType == "transmitter")
     {
@@ -498,7 +638,38 @@ GeoLevels ParseGeojson(const std::string& jsonFile, int& errorCode)
         transmitters[transmitterPair.first] = std::vector<Transmitter<GeoPoint3D>>();
       transmitters[transmitterPair.first].push_back(transmitterPair.second);
     }
+
+    if (featureType == "reference_point")
+    {
+      std::pair<LevelId, ReferencePoint<GeoPoint>> refpointsPair = parseReferencePoint(feature);
+      if (referencePoints.find(refpointsPair.first) == referencePoints.end())
+        referencePoints[refpointsPair.first] = GeoReferencePoints();
+      referencePoints[refpointsPair.first].push_back(refpointsPair.second);
+    }
   }
+
+  //TODO it is possible to have levels without transmitters so why we should
+  //check levels mismatch???
+  //if (!transmitters.empty() && !haveEqualKeys(transmitters, levels))
+  //{
+  //  errorCode = MISSING_LEVELS;
+  //  std::cout << "transmitters levels mismatch!" << std::endl;
+  //  return GeoLevels();
+  //}
+
+  //if (!graphs.empty() && !haveEqualKeys(graphs, levels))
+  //{
+  //  errorCode = MISSING_LEVELS;
+  //  std::cout << "graphs levels mismatch!" << std::endl;
+  //  return GeoLevels();
+  //}
+
+  //if (!referencePoints.empty() && !haveEqualKeys(referencePoints, levels))
+  //{
+  //  errorCode = MISSING_LEVELS;
+  //  std::cout << "refpoints levels mismatch!" << std::endl;
+  //  return GeoLevels();
+  //}
 
   std::vector<std::shared_ptr<GeoLevel> > vLevels;
   for (const auto& entry : levels)
@@ -507,10 +678,16 @@ GeoLevels ParseGeojson(const std::string& jsonFile, int& errorCode)
     geolevel->id.value = entry.first.value;
     geolevel->altitude = 100.0; //TODO
 
+    if (graphs.find(entry.first) != graphs.end())
+      geolevel->graph = graphs.at(entry.first);
+
     geolevel->geometry = getGeometry(entry.second);
 
     if (transmitters.find(entry.first) != transmitters.end())
       geolevel->transmitters = transmitters.at(entry.first);
+
+    if (referencePoints.find(entry.first) != referencePoints.end())
+      geolevel->referencePoints = referencePoints.at(entry.first);
 
     vLevels.push_back(std::move(geolevel));
   }

@@ -1,15 +1,15 @@
 /** level_estimator.h
 *
-* Copyright (c) 2017 Navigine.
+** Copyright (c) 2017 Navigine.
 *
 */
 
 #ifndef LEVEL_ESTIMATOR_H
 #define LEVEL_ESTIMATOR_H
 
-#include <navigation_input.h>
-#include <navigation_settings.h>
-#include <level_collector.h>
+#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/navigation_settings.h>
+#include <navigine/navigation-core/level_collector.h>
 
 #include "level_history.h"
 #include "barometer.h"

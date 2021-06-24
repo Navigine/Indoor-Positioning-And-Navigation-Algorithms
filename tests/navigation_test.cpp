@@ -4,11 +4,11 @@
  *
  */ 
 
-#include <navigation_client.h>
-#include <navigation_input.h>
-#include <navigation_output.h>
-#include <navigation_settings.h>
-#include <level.h>
+#include <navigine/navigation-core/navigation_client.h>
+#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/navigation_output.h>
+#include <navigine/navigation-core/navigation_settings.h>
+#include <navigine/navigation-core/level.h>
 
 #include <iostream>
 #include <iomanip>
@@ -16,7 +16,7 @@
 #include <sstream>
 
 #include "../tools/verification/helpers.h"
-#include "../include/geolevel.h"
+#include <navigine/navigation-core/geolevel.h>
 
 using namespace navigine::navigation_core;
 
@@ -87,9 +87,14 @@ int main(int argc, char** argv)
         firstTs = navBatchInput[0].ts;
     }
     const std::vector<NavigationOutput> navBatchOutput = navClient->navigate(navBatchInput);
+    const std::vector<NavigationState> navStates = navClient->getStates();
     
     for (std::size_t i = 0; i < navBatchOutput.size(); ++i)
     {
+      if (navBatchOutput[i].status == NavigationStatus::OK)
+      {
+        BuildPdrTrack(navStates[i].getStepLen(), navStates[i].getHeading(), pdrX, pdrY);
+      }
       std::string providerStr;
       switch (navBatchOutput[i].provider)
       {

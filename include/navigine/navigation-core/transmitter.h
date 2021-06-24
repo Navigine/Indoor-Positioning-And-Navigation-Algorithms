@@ -4,7 +4,7 @@
 #include <vector>
 #include <cmath>
 #include "declare_identifier.h"
-#include "point.h"
+#include <navigine/navigation-core/point.h>
 
 namespace navigine {
 namespace navigation_core {

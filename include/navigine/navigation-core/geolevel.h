@@ -12,7 +12,11 @@
 #include <map>
 #include <unordered_map>
 
+#include "level.h"
 #include "level_geometry.h"
+#include "boost_geometry_adaptation.h"
+#include "graph.h"
+#include "reference_point.h"
 #include "transmitter.h"
 
 namespace navigine {
@@ -22,7 +26,9 @@ struct GeoLevel
 {
   LevelId id;
   Geo3DTransmitters transmitters;
+  GeoReferencePoints referencePoints;
   LevelGeometry geometry;
+  Graph<GeoPoint> graph;
   double altitude;
 };
 

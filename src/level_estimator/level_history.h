@@ -9,7 +9,7 @@
 
 #include <vector>
 #include <map>
-#include "level.h"
+#include <navigine/navigation-core/level.h>
 
 namespace navigine {
 namespace navigation_core {

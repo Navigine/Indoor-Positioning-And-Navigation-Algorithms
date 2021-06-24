@@ -2,10 +2,10 @@
 #define _HELPERS_H_
 
 #include <vector>
-#include <level.h>
-#include <navigation_input.h>
-#include <navigation_settings.h>
-#include <geolevel.h>
+#include <navigine/navigation-core/level.h>
+#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/navigation_settings.h>
+#include <navigine/navigation-core/geolevel.h>
 
 struct NavigationPoint
 {

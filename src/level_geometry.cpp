@@ -1,4 +1,4 @@
-#include <level_collector.h>
+#include <navigine/navigation-core/level_collector.h>
 
 namespace navigine {
 namespace navigation_core {

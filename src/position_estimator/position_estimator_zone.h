@@ -23,6 +23,7 @@ public:
     const Level& level,
     long long ts,
     const RadioMeasurementsData& radioMsr,
+    const MotionInfo& motionInfo,
     NavigationStatus& retStatus) override;
 
 private:
