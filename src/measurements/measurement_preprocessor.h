@@ -1,9 +1,9 @@
 #ifndef MEASUREMENT_PREPROCESSOR_H
 #define MEASUREMENT_PREPROCESSOR_H
 
-#include <navigation_input.h>
-#include <navigation_settings.h>
-#include <level_collector.h>
+#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/navigation_settings.h>
+#include <navigine/navigation-core/level_collector.h>
 
 #include <functional>
 #include <vector>
@@ -27,7 +27,7 @@ public:
                          double rssiBias,
                          bool useStops);
 
-  RadioMeasurementsData extractMeasurements();
+  RadioMeasurementsData extractMeasurements(long long lastStepTime);
 
   void addMeasurement(const RadioMeasurement& msr);
 
@@ -40,6 +40,7 @@ private:
 
   long long mLastExtractionTs;
   long long mCurrentTs;
+  long long mLastStepTs;
 
   std::vector<RadioMeasurement> mMeasurements = {};
 };
@@ -55,7 +56,7 @@ class MeasurementsPreprocessor: public boost::static_visitor<>
     void updateMeasurements(const Measurement& navMsg);
     long long getCurrentTs() const;
     long long getLastSignalTs() const;
-    RadioMeasurementsData extractRadioMeasurements();
+    RadioMeasurementsData extractRadioMeasurements(long long lastStepTime);
     SensorMeasurement getValidSensor() const;
     NmeaMeasurement getCurrentNmea() const;
 

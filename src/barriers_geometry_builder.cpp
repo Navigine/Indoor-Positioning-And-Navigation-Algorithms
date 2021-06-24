@@ -4,7 +4,7 @@
  *
  */
 #include <iostream>
-#include "barriers_geometry_builder.h"
+#include <navigine/navigation-core/barriers_geometry_builder.h>
 
 namespace navigine {
 namespace navigation_core {

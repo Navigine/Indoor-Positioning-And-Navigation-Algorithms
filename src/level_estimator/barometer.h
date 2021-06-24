@@ -7,10 +7,10 @@
 #ifndef BAROMETER_H
 #define BAROMETER_H
 
-#include <navigation_input.h>
+#include <navigine/navigation-core/navigation_input.h>
 
 #include <deque>
-#include "level.h"
+#include <navigine/navigation-core/level.h>
 
 #include "../measurement_types.h"
 

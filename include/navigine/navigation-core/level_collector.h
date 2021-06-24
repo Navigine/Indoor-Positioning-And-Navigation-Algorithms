@@ -13,8 +13,11 @@
 #include <unordered_map>
 #include <boost/optional.hpp>
 
-#include "level.h"
+#include "boost_geometry_adaptation.h"
+#include "graph.h"
+#include <navigine/navigation-core/level.h>
 #include "geolevel.h"
+#include "reference_point.h"
 #include "transmitter.h"
 
 namespace navigine {

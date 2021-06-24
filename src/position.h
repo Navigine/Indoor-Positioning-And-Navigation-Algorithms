@@ -8,9 +8,9 @@
 #define NAVIGINE_POSITION_H
 
 #include <string>
-#include "point.h"
-#include "navigation_output.h"
-#include "level.h"
+#include <navigine/navigation-core/point.h>
+#include <navigine/navigation-core/navigation_output.h>
+#include <navigine/navigation-core/level.h>
 
 namespace navigine {
 namespace navigation_core {

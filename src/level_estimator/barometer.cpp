@@ -1,4 +1,4 @@
-#include <navigation_input.h>
+#include <navigine/navigation-core/navigation_input.h>
 
 #include <cmath>
 #include <numeric>

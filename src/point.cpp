@@ -4,7 +4,7 @@
  *
  */
 
-#include <point.h>
+#include <navigine/navigation-core/point.h>
 #include <cmath>
 
 namespace navigine {

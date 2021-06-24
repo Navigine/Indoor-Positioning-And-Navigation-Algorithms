@@ -1,6 +1,6 @@
 /** vector3d.h
 *
-* Copyv2 (c) 2018 Navigine. All v2s reserved.
+** Copyv2 (c) 2018 Navigine. All v2s reserved.
 *
 */
 

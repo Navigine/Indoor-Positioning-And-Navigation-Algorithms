@@ -1,0 +1,6 @@
+#ifndef NAVIGINE_VERSION_H
+#define NAVIGINE_VERSION_H
+
+#define NAVIGATION_LIBRARY_VERSION  "2.0"  // 09 July 2019
+
+#endif

@@ -4,7 +4,7 @@
  *
  */
 
-#include <level_collector.h>
+#include <navigine/navigation-core/level_collector.h>
 
 namespace navigine {
 namespace navigation_core {
@@ -27,6 +27,21 @@ XYZTransmitters getTransmittersInLocalCoordinates(
         t.type);
   }
   return localTransmitters;
+}
+
+XYReferencePoints getRefPointsInLocalCoordinates(
+    const GeoPoint& binding,
+    const std::vector<ReferencePoint<GeoPoint>>& referencePoints)
+{
+  XYReferencePoints localReferencePoints;
+  for (const ReferencePoint<GeoPoint>& rp: referencePoints)
+  {
+    localReferencePoints.emplace_back(
+        ReferencePointId(rp.id.value),
+        gpsToLocal(rp.point, binding),
+        rp.fingerprints);
+  }
+  return localReferencePoints;
 }
 
 Polygon getPolygonInLocalCoordinates(
@@ -76,6 +91,30 @@ LevelGeometry getGeometryInLocalCoordinates(
   return LevelGeometry{localArea, localBox};
 }
 
+Graph<XYPoint> getGraphInLocalCoordinates(
+  const GeoPoint& binding,
+  const Graph<GeoPoint>& geoGraph)
+{
+  Graph<XYPoint> xyGraph;
+  std::map<int, int> geoToXyVertexIds;
+  for (Graph<GeoPoint>::VertexIterator it = geoGraph.vertexBegin(); it != geoGraph.vertexEnd(); it++)
+  {
+    Graph<GeoPoint>::Vertex geoVertex = *it;
+    XYPoint p = gpsToLocal(geoVertex.point, binding);
+    Graph<XYPoint>::Vertex xyVertex = xyGraph.addVertex(p);
+    geoToXyVertexIds[geoVertex.id] = xyVertex.id;
+  }
+
+  for (Graph<GeoPoint>::EdgeIterator it = geoGraph.edgesBegin(); it != geoGraph.edgesEnd(); it++)
+  {
+    Graph<GeoPoint>::Vertex geoV1 = geoGraph.getVertex(it->first);
+    Graph<GeoPoint>::Vertex geoV2 = geoGraph.getVertex(it->second);
+    int xyV1 = geoToXyVertexIds[geoV1.id];
+    int xyV2 = geoToXyVertexIds[geoV2.id];
+    xyGraph.addEdge(xyV1, xyV2);
+  }
+  return xyGraph;
+}
 } //namespace
 
 
@@ -129,6 +168,9 @@ void LevelCollector::addGeoLevel(const GeoLevel& geoLevel)
 
   level.addTransmitters(getTransmittersInLocalCoordinates(binding, geoLevel.transmitters, geoLevel.altitude));
   level.setGeometry(getGeometryInLocalCoordinates(binding, geoLevel.geometry));
+
+  level.setReferencePoints(getRefPointsInLocalCoordinates(binding, geoLevel.referencePoints));
+  level.setGraph(getGraphInLocalCoordinates(binding, geoLevel.graph));
 
   mLevels.push_back(std::move(level));
   mLevelsIndices.insert({levelId, mLevels.size() - 1});

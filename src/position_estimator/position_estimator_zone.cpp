@@ -4,7 +4,7 @@
  *
  */
 
-#include <navigation_settings.h>
+#include <navigine/navigation-core/navigation_settings.h>
 #include "position_estimator_zone.h"
 
 namespace navigine {
@@ -13,7 +13,7 @@ namespace navigation_core {
 PositionEstimatorZone::PositionEstimatorZone(
   const std::shared_ptr<LevelCollector> &levelCollector,
   const NavigationSettings& navProps)
-  : PositionEstimator(levelCollector)
+    : PositionEstimator(levelCollector)
 {
   for (const Level& level: levelCollector->levels())
   {
@@ -27,6 +27,7 @@ Position PositionEstimatorZone::calculatePosition(
   const Level& level,
   long long ts,
   const RadioMeasurementsData& radioMsr,
+  const MotionInfo&,
   NavigationStatus &retStatus)
 {
   if (radioMsr.empty())

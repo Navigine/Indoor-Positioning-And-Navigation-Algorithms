@@ -1,11 +1,12 @@
 /** level_estimator.cpp
 *
-* Copyright (c) 2017 Navigine.
+** Copyright (c) 2017 Navigine.
 *
 */
 
-#include <navigation_settings.h>
+#include <navigine/navigation-core/navigation_settings.h>
 #include "level_estimator.h"
+
 
 namespace navigine {
 namespace navigation_core {

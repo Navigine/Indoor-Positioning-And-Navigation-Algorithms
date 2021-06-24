@@ -1,6 +1,6 @@
 /** level_estimator_transmitters.h
 *
-* Copyright (c) 2019 Navigine.
+** Copyright (c) 2019 Navigine.
 *
 */
 
@@ -24,6 +24,7 @@ protected:
 
 private:
   std::shared_ptr<LevelCollector> mLevelIndex;
+  const bool mUseTxPower;
 };
 
 } } // namespace navigine::navigation_core
