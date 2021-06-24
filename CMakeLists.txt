@@ -13,6 +13,19 @@ if(NOT json_POPULATED)
   add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+FetchContent_Declare(
+  Eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG master
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE)
+set(EIGEN_BUILD_DOC OFF)
+set(BUILD_TESTING OFF)
+set(EIGEN_BUILD_PKGCONFIG OFF)
+set( OFF)
+
+FetchContent_MakeAvailable(Eigen)
+
 set(BOOST_ENABLE_CMAKE ON)
 set(Boost_USE_STATIC_LIBS ON)
 
@@ -38,7 +51,8 @@ set_target_properties("${target}" PROPERTIES COMPILE_DEFINITIONS "BUILD_FOR_LINU
 set_target_properties("${target}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing -funwind-tables -fPIC -pipe -m64 -march=x86-64 -fstack-protector-strong -pthread -O3 -fno-omit-frame-pointer -g2 -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=c++17 -frtti -fexceptions ")
 target_link_libraries("${target}" PRIVATE
   "navigation-core"
-  nlohmann_json::nlohmann_json)
+  nlohmann_json::nlohmann_json
+  Eigen3::Eigen)
 
 
 #navigation-core:copy_public_include_dir
@@ -98,4 +112,5 @@ target_include_directories("${target}" PRIVATE
 set_property(TARGET "${target}" PROPERTY CXX_STANDARD 17)
 set_target_properties("${target}" PROPERTIES COMPILE_DEFINITIONS "BUILD_FOR_LINUX;_DEBUG;")
 set_target_properties("${target}" PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing -funwind-tables -fPIC -pipe -m64 -march=x86-64 -fstack-protector-strong -pthread -O3 -fno-omit-frame-pointer -g2 -fvisibility-inlines-hidden -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare -std=c++17 -frtti -fexceptions ")
-target_link_libraries("${target}" PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries("${target}" PRIVATE nlohmann_json::nlohmann_json
+					  Eigen3::Eigen)
