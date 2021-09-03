@@ -1,4 +1,5 @@
-Indoor-navigation-algorithms
+Indoor-navigation-algorithms  
+[![Build](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/ubuntu.yml) [![Build](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/macos.yml/badge.svg)](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/macos.yml)
 ============================
 
 * extlibs/ - the source code of third-party libraries on which NavigineSDK depends
