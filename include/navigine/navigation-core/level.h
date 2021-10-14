@@ -20,51 +20,75 @@
 #include "transmitter.h"
 #include "navigation_input.h"
 
-namespace navigine {
-namespace navigation_core {
-
-DECLARE_IDENTIFIER(LevelId)
-
-class Level
+namespace navigine
 {
-public:
-  Level(const LevelId& id, const GeoPoint& bindingPoint)
-    : mId (id)
-    , mBindingPoint (bindingPoint)
-  {}
+  namespace navigation_core
+  {
 
-  void addTransmitters(const XYZTransmitters& transmitters);
-  void setReferencePoints(const XYReferencePoints& referencePoints);
-  void setGraph(const Graph<XYPoint>& graph);
-  void setGeometry(const LevelGeometry &levelGeometry);
+    DECLARE_IDENTIFIER(LevelId)
 
-  const LevelId& id() const;
-  const GeoPoint& bindingPoint() const;
+    class Level
+    {
+    public:
+      /**
+      * @brief Construct a new Level object
+      * 
+      * @param id - {type}
+      * @param bindingPoint - {type}
+      */
+      Level(const LevelId &id, const GeoPoint &bindingPoint)
+          : mId(id), mBindingPoint(bindingPoint){}
 
-  bool containsTransmitter(const TransmitterId& txId) const;
-  const Transmitter<XYZPoint>& transmitter(const TransmitterId& txId) const;
+      /**
+      * @brief add transmitters location and parameters to the level map
+      * 
+      * @param transmitters - {type}
+      */
+      void addTransmitters(const XYZTransmitters &transmitters);
+      /**
+      * @brief Set the Reference Points object
+      * 
+      * @param referencePoints - {type}
+      * @details used during integration phase when transmitters locations are not known
+      */
+      void setReferencePoints(const XYReferencePoints &referencePoints);
+      /**
+       * @brief Add the Graph object to the Level
+       * 
+       * @param graph - {type}
+       * @details graph connects zones with allowed motion
+       */
+      void setGraph(const Graph<XYPoint> &graph);
+      void setGeometry(const LevelGeometry &levelGeometry);
 
-  const Radiomap& radiomap() const;
-  const Graph<XYPoint>& graph() const;
-  const LevelGeometry& geometry() const;
+      const LevelId &id() const;
+      const GeoPoint &bindingPoint() const;
 
-private:
-  const LevelId mId;
-  const GeoPoint mBindingPoint;
+      bool containsTransmitter(const TransmitterId &txId) const;
+      const Transmitter<XYZPoint> &transmitter(const TransmitterId &txId) const;
 
-  std::unordered_map<TransmitterId, Transmitter<XYZPoint>, HasherTransmitterId> mTransmitters;
-  Radiomap mRadiomap;
-  LevelGeometry mGeometry;
-  Graph<XYPoint> mGraph;
-};
+      const Radiomap &radiomap() const;
+      const Graph<XYPoint> &graph() const;
+      const LevelGeometry &geometry() const;
 
-typedef std::vector<std::unique_ptr<Level> >::const_iterator LevelIterator;
-typedef std::vector<std::unique_ptr<Level> > Levels;
+    private:
+      const LevelId mId;
+      const GeoPoint mBindingPoint;
 
-RadioMeasurementsData getLevelRadioMeasurements(
-  const Level& level,
-  const RadioMeasurementsData& radioMsr);
+      std::unordered_map<TransmitterId, Transmitter<XYZPoint>, HasherTransmitterId> mTransmitters;
+      Radiomap mRadiomap;
+      LevelGeometry mGeometry;
+      Graph<XYPoint> mGraph;
+    };
 
-} } // namespace navigine::navigation_core
+    typedef std::vector<std::unique_ptr<Level>>::const_iterator LevelIterator;
+    typedef std::vector<std::unique_ptr<Level>> Levels;
+
+    RadioMeasurementsData getLevelRadioMeasurements(
+        const Level &level,
+        const RadioMeasurementsData &radioMsr);
+
+  }
+} // namespace navigine::navigation_core
 
 #endif // NAVIGINE_LEVEL_H
