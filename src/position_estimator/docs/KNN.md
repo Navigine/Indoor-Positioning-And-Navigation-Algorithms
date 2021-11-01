@@ -1,14 +1,15 @@
 # K-Nearest Neighbours Positioning Algorithm
 
+
 Note:: The algorithm requires special radiomap data measurement that can beperformed using procedure called Radiomap Measurement.
 For detailed information of data collection for algorithm usage refer to [https://docs.navigine.com/Measuring_Radiomap](https://docs.navigine.com/Measuring_Radiomap)
 
-Radiomap Measurement:: measuring the target location's radiomap on foot via an Android device with the [Navigine Application](img/https://github.com/Navigine/Indoor-Navigation-Android-Mobile-SDK-2.0) installed.
+Radiomap Measurement:: measuring the target location's radiomap on foot via an Android device with the [Navigine Application](https://github.com/Navigine/Indoor-Navigation-Android-Mobile-SDK-2.0) installed.
 
 *Requirements*:
 * infrastructure deployed
 * maps (locations) implemented
-* [radiomap data](img/https://docs.navigine.com/Measuring_Radiomap) collected
+* [radiomap data](https://docs.navigine.com/Measuring_Radiomap) collected
 *Our notation*:
 * RSSI
 * KNN
@@ -204,3 +205,9 @@ The effective number of nearest neighbours needed for lacation estimation can be
 If during the measurement procedure, average visible number of beacons for each access points was high, we can possibly improve our accuracy. And if there's multiple signal reflections, we may want to localize only on 3 most strong signals and rejecting all noisy information.
 
 ## Preview & examples
+
+
+Demo video for KNN in triangulation mode:
+
+https://user-images.githubusercontent.com/68880242/139697439-7cffb9a0-e8cf-4f52-8ba3-f40350acbd14.mov
+
