@@ -38,15 +38,15 @@ The line types are shown below.
 
 ### Type 203 - BEACON
 
-```{“timestamp”: <timestamp>, “type”: 203, “bssid”: <bssid>, “rssi”: <rssi>, “power” <power>}```
+```{“timestamp”: <timestamp>, “type”: 203, “bssid”: <bssid>, “rssi”: <rssi>, “power”: <power>}```
 
 ### Type 204 - EDDYSTONE
 
-```{“timestamp”: <timestamp>, “type”: 204, “bssid”: <bssid>, “rssi”: <rssi>, “power” <power>}```
+```{“timestamp”: <timestamp>, “type”: 204, “bssid”: <bssid>, “rssi”: <rssi>, “power”: <power>}```
 
 ### Type 205 - WIFI RTT
 
-```{“timestamp”: <timestamp>, “type”: 205, “bssid”: <bssid>, “distance”: <distance>, “stddev” <stddev>}```
+```{“timestamp”: <timestamp>, “type”: 205, “bssid”: <bssid>, “distance”: <distance>, “stddev”: <stddev>}```
 
 ### Type 300 - NMEA
 
