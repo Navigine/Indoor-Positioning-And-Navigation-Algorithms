@@ -14,6 +14,7 @@ namespace
 {
   static const double STEP_NUM_TEST_THRESHOLD_PERCENTAGE = 5.0;
   static const double STEP_LEN_TEST_THRESHOLD_PERCENTAGE = 20.0;
+  static const std::string TEST_DATA_FOLDER = "logs";
 }
 
 std::pair<std::pair<int, double>, std::vector<SensorMeasurement>> parseTestData(const std::string& logFile)

@@ -1,5 +1,6 @@
 #include <cmath>
 #include <pedometer.h>
+#include <numeric>
 
 namespace navigine {
 namespace navigation_core {

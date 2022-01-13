@@ -9,6 +9,7 @@ using namespace navigine::navigation_core;
 static const double MAGNETIC_FLUX_DENSITY = 0.48;
 static const double MAGNETIC_FIELD_INCLINATION = 60.48 * M_PI / 180;
 static const double G = 9.81;
+const std::string TEST_DATA_FOLDER = "test_data/";
 
 /**
  * duration - duration of pendulum motion in seconds
@@ -169,7 +170,7 @@ int main()
     os << accelMsr.ts << " " << ori.roll << " " << ori.pitch  << " " << ori.yaw << std::endl;
   }
   os.close();
-  std::cout << "calculated angles were written to " << simulatedMsrFileName << std::endl;
+  std::cout << "calculated angles were written to " << calculatedAngleFileName << std::endl;
 
   return 0;
 }

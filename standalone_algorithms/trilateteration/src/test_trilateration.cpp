@@ -106,7 +106,7 @@ int main( void )
   if (errorCode)
     return errorCode;
 
-  std::cin.get();
+  // std::cin.get();
   return 0;
 }
 
