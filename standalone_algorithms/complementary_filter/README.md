@@ -12,7 +12,9 @@ In case if the measurements from different sources give precise information in d
 
 [//]: # "angle = alpha * (angle + gyrData * dt) + beta * accData + gamma * magnData)"
 
-<p align="center"><img alt="angle = \alpha -10\mu \log \frac{d}{d_0} + w " src="https://latex.codecogs.com/svg.image?\phi&space;=&space;\alpha&space;*&space;(\alpha&space;&plus;&space;gyrData&space;*&space;dt)&space;&plus;&space;\beta&space;*&space;accData&space;&plus;&space;\gamma&space;*&space;magnData" title="\phi = \alpha * (\alpha + gyrData * dt) + \beta * accData + \gamma * magnData" /></p>
+<p align="center"><img alt="angle = \alpha -10\mu \log \frac{d}{d_0} + w " src="https://latex.codecogs.com/svg.image?\phi&space;=&space;\alpha&space;*&space;(\phi&space;&plus;&space;gyrData&space;*&space;dt)&space;&plus;&space;\beta&space;*&space;accData&space;&plus;&space;\gamma&space;*&space;magnData" title="\phi = \alpha * (\phi + gyrData * dt) + \beta * accData + \gamma * magnData" /></p>
+
+where alpha, beta, gamma are constant weights of different measurement sources.
 
 ### Low and high pass filters
 
@@ -45,6 +47,46 @@ Measurements <img src="https://latex.codecogs.com/svg.image?y_x&space;\hspace{1m
 A filter is called a complementary filter if 
 <p align="center"><img src="https://latex.codecogs.com/svg.image?F_1(s)&space;&plus;&space;F_2(s)&space;=&space;1" title="F_1(s) + F_2(s) = 1" />
 
+### Calculations
+
+Acceleration is stored in quaternion form. The weight part of it is a numeric value of the acceleration, the vector part -- vector components.
+
+The goal of developing an estimator is to provide a smooth estimate <img src="https://latex.codecogs.com/svg.image?\hat{R(t)}&space;\in&space;SO(3)" title="\hat{R(t)} \in SO(3)" /> of a state R(t) that is evolving due
+to some external input based on a set of measurements.
+
+Frame of reference allows to determine the error. It can be calculated as follows
+
+<p align="center"><img src="https://latex.codecogs.com/svg.image?\dot{\hat{R}}&space;=&space;R^{*}&space;*&space;R" title="\dot{\hat{R}} = R^{*} * R" />
+
+<p align="center"><img src="https://latex.codecogs.com/svg.image?err&space;=&space;acc&space;\times&space;\dot{\hat{R}" title="err = acc \times \dot{\hat{R}" />
+
+The direct complementary ﬁlter dynamics are speciﬁed by
+
+<p align="center"><img src="https://latex.codecogs.com/svg.image?\dot{\hat{R}}&space;=&space;(R\Omega&space;*&space;R\omega)\times&space;\hat{R}" title="\dot{\hat{R}} = (R\Omega * R\omega)\times \hat{R}" />
+
+The R* operation is an inverse operation on SO(3)
+
+The kinematics can be written directly in terms of the quaternion representation of SO(3) by
+
+<p align="center"><img src="https://latex.codecogs.com/svg.image?\dot{q}&space;=&space;q&space;\times&space;p(\Omega)" title="\dot{q} = q \times p(\Omega)" />
+
+Quaternion is multiplied by the pure rotation quaternion <img src="https://latex.codecogs.com/svg.image?p(\Omega)" title="p(\Omega)" />, where real part is equal to zero.
+In the source code provided 'updateQuaternion(mQ, rotation)' function which does the same calculations.
+
+The gyroscope data is integrated every timestep with the current angle value:
+
+`omega = gyro * dt + mIntegralError * dt;`
+
+### Components
+
+The following constant coefficients are the weights applied to accelerometer, gyroscope and magnetometer components.
+
+```
+    double     mKaccelerometer;
+    double     mKmagnetometer;
+    double     mKintegralGain;
+```
+
 ### Build
 
 To build the project for running tests make sure that `BUILD_TESTS` option is turned on.
@@ -60,3 +102,8 @@ Run tests:
 ```
 ./build/test-filter
 ```
+
+### Results of orientation
+
+<img src="../illustrations/orientation_estimation.png"
+     alt="Markdown Monster icon"/>
