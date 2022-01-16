@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 project(Navigation-core)
 
-option(BUILD_TESTS    "Build tests" ON)
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_TESTS    "Build tests" OFF)
+option(BUILD_EXAMPLES "Build examples" ON)
 
 set(BOOST_ENABLE_CMAKE ON)
 set(Boost_USE_STATIC_LIBS OFF)
