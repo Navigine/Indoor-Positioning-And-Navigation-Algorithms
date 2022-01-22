@@ -1,10 +1,27 @@
 ### Complementary filter
 
-The complementary filter estimates orientation based on accelerometer, magnetometer and gyroscope measurements collected from the user device.
+Complementary filter fuses data from IMU (Intertial Measurement Units) sensors such as accelerometer, magnetometer, gyroscope and pedometer. Configuration of sensors that are in use during the position estimation process may vary depending on the quality of signal from sensors. For instance, it is common to work with accelerometer and gyroscope, rejecting other sensors if signal from corresponding sensors is noisy.
 
 The example directory contains code that simulates IMU measuremetns of pendulum and estimates pendulum orientation with the complementary filter. It is possible to plot the result of orientation estimation with python script located at helpers directory.
 
 ### What is a complementary filter
+
+The basic complementary filter is shown in a picture below.
+
+<img src="../illustrations/complementary_filter.png"
+     alt="Markdown Monster icon"/>
+
+Where z is an input signal, x and y are noisy measurements of this signal. <img src="https://latex.codecogs.com/svg.image?\hat{z}&space;\:&space;is" title="\hat{z} \: is" /> an estimation of the output signal produced buy the filter. Assume that
+the noise in y is mostly high frequency, and the noise in x is mostly low frequency. Then G(s) can be made a low-pass filter to filter out the high-frequency noise in y. If G(s) is low-pass, [1 - G(s)] is the complement, i.e., a high-pass filter which filters out the low-frequency noise in x. The complementary filter can be reconfigured as in figure B. In this case the input to G(s) is
+
+<p align="center"><img src="https://latex.codecogs.com/svg.image?y&space;-&space;x&space;=&space;n_2&space;-&space;n_1&space;\:&space;," title="y - x = n_2 - n_1 \: ," /> 
+ 
+ so that the filter G(s) just operates on the noise or error in the measurements x and y. In the case of noise less or error-free measurements
+
+<p align="center"><img src="https://latex.codecogs.com/svg.image?\hat{z}&space;=&space;z[1&space;-&space;G(s)]&space;&plus;&space;zG(s)&space;=&space;z," title="\hat{z} = z[1 - G(s)] + zG(s) = z," />
+
+
+i.e., the signal is estimated perfectly.
 
 Gyroscope obtains the angular position of the object by integrating the angular velocity over time. Gyroscope is a very precise sensor and not susceptible to external forces. But because of integration, the measurement tends to drift, not returning to zero when the system goes back to its original position. Accelerometer is a sensor which takes into consideration every small forse therefore it can be easily disturbed. That is why the accelerometer data is reliable only on a long term. The advantage of accelerometer is that it does not drift. A magnetometer is a device that measures magnetic field or magnetic dipole moment.
 
@@ -46,6 +63,10 @@ Measurements <img src="https://latex.codecogs.com/svg.image?y_x&space;\hspace{1m
 
 A filter is called a complementary filter if 
 <p align="center"><img src="https://latex.codecogs.com/svg.image?F_1(s)&space;&plus;&space;F_2(s)&space;=&space;1" title="F_1(s) + F_2(s) = 1" />
+
+### Comparison with Kalman filter
+
+Complementary filter outperforms Kalman filter significantly by using less computational and processing power and providing more accuracy. The Complementary filter can be applied by having only vector and quaternion mathematical operators. On other hand, the traditional Kalman filter needs an enormous number of matrix operations, including multiplications and taking inverses of these matrices, which, besides the complexity, also results in high computational and processing costs.
 
 ### Calculations
 
