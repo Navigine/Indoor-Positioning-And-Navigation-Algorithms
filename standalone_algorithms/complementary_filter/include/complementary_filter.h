@@ -39,7 +39,7 @@ class ComplementaryFilter
     ComplementaryFilter (double Ka, double Km, double Ki)
       : mKaccelerometer {Ka}
       , mKmagnetometer  {Km}
-      , mKintergalGain  {Ki}
+      , mKintegralGain  {Ki}
     {}
   
     double      getMagneticAzimuth()  const;
@@ -58,8 +58,8 @@ class ComplementaryFilter
     long long  mLastGyroTs        = -1;
     double     mKaccelerometer    = 0.1;
     double     mKmagnetometer     = 0.05;
-    double     mKintergalGain     = 0.0;
-    Vector3d   mIntergalError     = {};
+    double     mKintegralGain     = 0.0;
+    Vector3d   mIntegralError     = {};
     Quaternion mQ                 = {};
     double     mMagneticAzimuth   = 0.0;
     double     mDeviceAzimuth     = 0.0;

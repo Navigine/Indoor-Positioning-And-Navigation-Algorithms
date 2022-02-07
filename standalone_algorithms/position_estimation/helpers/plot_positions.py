@@ -8,6 +8,6 @@ plt.gca().set_aspect('equal')
 plt.plot(df_calculated.x, df_calculated.y, '.-', label='calculated positions')
 plt.plot(df_benchmark.x, df_benchmark.y, '-', label='reference trace')
 
-plt.legend()
+plt.legend(bbox_to_anchor=(1.0, -0.25))
 plt.show()
 

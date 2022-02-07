@@ -67,7 +67,7 @@ int Trilateration::calculateCoordinates()
 
   if (mBeaconMeas.size () == 0 )
   {
-    printf("The number of visible beacon = %d \n",
+    printf("The number of visible beacon = %ld \n",
               mBeaconMeas.size ());
     return ERROR_NO_SOLUTION_TRILATERATION;
   }
@@ -174,7 +174,7 @@ void Trilateration::printXyToFile( char* filename ) const
 int Trilateration::calculateTrilaterationCoordinates()
 {
   double normalizeCoefficient = 0.0;
-  //take revert values, because lower distance then bigger weight
+  //take revert values, because lower is the distance, greater the weight gets
   for (unsigned int i = 0; i < mBeaconMeas.size(); i++)
     normalizeCoefficient += 1.0 / fabs( mBeaconMeas[ i ].getDistance() );
 
@@ -259,7 +259,7 @@ int Trilateration::deleteDuplicateMeasurements( vector<BeaconMeas>& beaconMeas )
       return ERROR_IN_TRILATER;
     }
  
-    //set average rssi to the beacon that doesn't has duplicates now
+    //set average rssi to the beacon that doesn't have duplicates now
     rssi     /= (std::max)(nOfMeasFromSameAp, 1);
     distance /= (std::max)(nOfMeasFromSameAp, 1);
      

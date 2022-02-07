@@ -101,7 +101,7 @@ void ComplementaryFilter::updateUsingGyroscope(const SensorMeasurement& gyroMeas
   double   dt    = static_cast<double>(gyroMeas.ts - mLastGyroTs) / 1000.0;
   mLastGyroTs    = gyroMeas.ts;
   Vector3d gyro  = gyroMeas.values;
-  Vector3d omega = gyro * dt + mIntergalError * dt;
+  Vector3d omega = gyro * dt + mIntegralError * dt;
   mQ = updateQuaternion(mQ, omega);
 } 
 
@@ -113,7 +113,7 @@ void ComplementaryFilter::updateUsingAccelerometer(const SensorMeasurement& acce
   Vector3d rotation        = mKaccelerometer * error;
 
   mQ     = updateQuaternion(mQ, rotation);
-  mIntergalError += (mKintergalGain > DOUBLE_EPSILON) ? (mKintergalGain * error) : Vector3d(0.0, 0.0, 0.0);
+  mIntegralError += (mKintegralGain > DOUBLE_EPSILON) ? (mKintegralGain * error) : Vector3d(0.0, 0.0, 0.0);
 }
 
 void ComplementaryFilter::updateUsingMagnetometer(const SensorMeasurement& magnMeas)
@@ -131,7 +131,7 @@ void ComplementaryFilter::updateUsingMagnetometer(const SensorMeasurement& magnM
   Vector3d rotation        = mKmagnetometer * error;
 
   mQ = updateQuaternion(mQ, rotation);
-  mIntergalError += (mKintergalGain > DOUBLE_EPSILON) ? (mKintergalGain * error) : Vector3d(0.0, 0.0, 0.0);
+  mIntegralError += (mKintegralGain > DOUBLE_EPSILON) ? (mKintegralGain * error) : Vector3d(0.0, 0.0, 0.0);
 }
 
 double ComplementaryFilter::caclulateMagneticAzimuth(const SensorMeasurement& magn)

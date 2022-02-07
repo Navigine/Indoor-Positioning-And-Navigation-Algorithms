@@ -38,11 +38,11 @@ int main(int argc, char *argv[])
   }
 
   std::string logFile = std::string(argv[1]);
-  std::vector<SensorMeasurement> measuremetns = parseMeasurements(logFile);
+  std::vector<SensorMeasurement> measurements = parseMeasurements(logFile);
 
   Pedometer pedometer;
   long stepCounter = 0;
-  for (SensorMeasurement msr: measuremetns)
+  for (SensorMeasurement msr: measurements)
   {
     std::vector<SensorMeasurement> singleMsrVector;
     singleMsrVector.emplace_back(msr);

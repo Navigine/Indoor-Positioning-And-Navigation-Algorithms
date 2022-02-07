@@ -4,6 +4,7 @@
 #include "measurement_preprocessor.h"
 #include "nearest_transmitter_estimator.h"
 
+const std::string TEST_DATA_FOLDER = "logs/";
 using namespace navigine::navigation_core;
 
 struct NavigationPoint
