@@ -32,17 +32,17 @@ However if we get all distances between the mobile and reference nodes, they are
 
 LSE is widely used in the distance based positioning systems. Equation on the mobile location can be set as
 
-<p align="center"><img src="https://latex.codecogs.com/svg.image?Y&space;=&space;AX" title="Y = AX" />
+<p align="center"><img src="https://render.githubusercontent.com/render/math?math=Y=AX" title="Y = AX" />
 
 where Y is a known n-dimensional vector, A is NxM matrix. If N>M, the number of equation is greater than the
 number of unknown numbers, we can obtain the optimal X using LSE. The idea of LSE is to make the least value of sum
 of square of error
 
-<p align="center"><img src="https://latex.codecogs.com/svg.image?f(x)&space;=&space;(AX&space;-&space;Y)^2&space;=&space;(AX&space;-&space;Y)^{T}(AX&space;-&space;Y)" title="f(x) = (AX - Y)^2 = (AX - Y)^{T}(AX - Y)" />
+<p align="center"><img src="https://render.githubusercontent.com/render/math?math=f(x)=(AX-Y)^2=(AX-Y)^{T}(AX-Y)" title="f(x) = (AX - Y)^2 = (AX - Y)^{T}(AX - Y)" />
 
-We get the minimum of the above function, if <img src="https://latex.codecogs.com/svg.image?A^{T}A" title="A^{T}A" /> is nonsingular
+We get the minimum of the above function, if <img src="https://render.githubusercontent.com/render/math?math=A^{T}A" title="A^{T}A" /> is nonsingular
 
-<p align="center"><img src="https://latex.codecogs.com/svg.image?X&space;=&space;(A^{T}A)^{-1}A^{T}Y" title="X = (A^{T}A)^{-1}A^{T}Y" />
+<p align="center"><img src="https://render.githubusercontent.com/render/math?math=X=(A^{T}A)^{-1}A^{T}Y" title="X = (A^{T}A)^{-1}A^{T}Y" />
 
 ### Trilateration Algorithm
 
@@ -52,7 +52,7 @@ multilateration ranging using more than three signals.
 
 ### Build
 
-```
+```sh
 cd /standalone_algorithms/trilateration
 cmake -Bbuild -H.
 cmake --build build
@@ -60,6 +60,6 @@ cmake --build build
 
 Run tests:
 
-```
+```sh
 ./build/test
 ```
