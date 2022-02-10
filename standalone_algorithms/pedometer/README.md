@@ -21,7 +21,7 @@ To build the project for running tests make sure that `BUILD_TESTS` option in CM
 
 To build the project for running example turn `BUILD_EXAMPLES` on.
 
-```
+```sh
 cd /standalone_algorithms/pedometer && rm -rf build
 cmake -Bbuild -H.
 cmake --build build
@@ -29,12 +29,12 @@ cmake --build build
 
 Run tests:
 
-```
+```sh
 ./build/test-filter
 ```
 
 Run example:
 
-```
+```sh
 ./build/pedometer logs/HuaweiLong1.log
 ```
