@@ -13,17 +13,17 @@ Indoor-navigation-algorithms
 
 This repository consists of the following components
 
-* [src](/navigation-core/src/) - the source code of Navigine positioning algorithms
+* [src](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/tree/master/src) - the source code of Navigine positioning algorithms
 
-* [standalone_algorithms](/navigation-core/standalone_algorithms) - set of algorithms used in navigation
+* [standalone_algorithms](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/tree/master/standalone_algorithms) - set of algorithms used in navigation
 
-* [tests](/navigation-core/tests/) - test and utilities for the evaluation of source code quality
+* [tests](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/tree/master/tests) - test and utilities for the evaluation of source code quality
 
-* [tools](/navigation-core/tools/verification/) - utilities for data extraction from map and settings
+* [tools](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/tree/master/tools/verification) - utilities for data extraction from map and settings
 
-## Creating [Navigation Client](/navigation-core/include/navigation_client.h)
+## Creating Navigation Client
 
-Here are some examples to give you an idea how to use Navigation Client
+Here are some examples to give you an idea how to use [Navigation Client](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/blob/master/include/navigine/navigation-core/navigation_client.h).
 
 First, create variables that will store your data.
 ```c++
@@ -54,16 +54,15 @@ Inside for loop add all the transmitters from your location. Here is an example 
 
 ```
 
-Create geometry of the level using method `getGeometry` from [barriers_geometry_builder.h](/navigation-core/include/navigine/navigation-core/barriers_geometry_builder.h) file. Geometry could be created using the barriers and the size of the level
+Create geometry of the level using method `getGeometry` from [barriers_geometry_builder.h](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/blob/master/include/navigine/navigation-core/barriers_geometry_builder.h) file. Geometry could be created using the barriers and the size of the level
     
     Parameters:
         - barrierList - list of polygons, where each polygon describes the barrier of the level;
         - allowedArea - polygon, which is created using width and height of the map;
 
-```c++
+Create the list of Polygons which will describe all the barriers
 
-    // create the list of Polygons which will describe all the barriers
-    // example from navigate.cpp in Android repository
+```c++
     std::list<navigine::navigation_core::Polygon> barriersList;
     for (size_t i = 0; i < barriers.size(); ++i)
     {
@@ -74,13 +73,16 @@ Create geometry of the level using method `getGeometry` from [barriers_geometry_
 
         barriersList.push_back(barrier);
     }
+```
 
-    // create the polygon of allowed area
-    // example from navigate.cpp in Android repository
+Create the polygon of allowed area
+
+```c++
     navigine::navigation_core::Polygon levelArea;
-    auto boundingBox = navigation_core::Box(navigation_core::Point(leftMin.latitude, leftMin.longitude), navigation_core::Point(rightMax.latitude, rightMax.longitude));
+    auto boundingBox = navigation_core::Box(
+                                   navigation_core::Point(leftMin.latitude, leftMin.longitude),
+                                   navigation_core::Point(rightMax.latitude, rightMax.longitude));
     boost::geometry::convert(boundingBox, allowedArea);
-
     geoLevel.geometry = navigine::navigation_core::getGeometry(barriersList, levelArea);
 ```
 
@@ -96,16 +98,42 @@ Create `NavigationSettings`, with two parameters - level settings and common set
 Create `NavigationClient` using method `createNavigationClient` which will take as arguments level collector and navigation settings.
 
 ```c++
-    navClient = navigine::navigation_core::createNavigationClient(levleCollector, navigationSettings);
+    navClient = navigine::navigation_core::createNavigationClient(levelCollector, navigationSettings);
+```
+
+## Navigation test
+
+The example of navigation is presented in a file [Navigation Test](https://github.com/Navigine/Indoor-Positioning-And-Navigation-Algorithms/blob/master/tests/navigation_test.cpp).
+The test application takes 3 parameters:
+- path to the file of the location in` geojson` format
+- path to the file of logs gathered in this location in `json` format
+- path to the settings file in `json` format in which parameters of the algorithm are specified
+
+### Build
+
+In order to build the test application go to the root directory of the repository and execute the following commands
+
+```
+cmake -H. -Bbuild
+cmake --build build
+```
+
+To run the tests
+
+```
+cd build/
+./navigation_test location.geojson log.json settings.json
 ```
 
 ## Evaluate the navigation
 
 Quality of navigation can be evaluated via calculation of different navigational errors.
+The most important among them are presented in the following table
 
-list of errors with description
-
-
-## Navigation test
-
-The example of navigation is presented in a file [Navigation Test](/navigation-core/tests/navigation_test.cpp).
+| Error         | Description |
+| :---          |    :----    |
+| `nav_err`     | Average navigation error in meters                                                                    |
+| `q_75_err`    | 75% quantile of all the measurements have navigation error less than the value of `nav_75_err`        |
+| `avr_fi`      | Average angle error in degrees                                                                        |
+| `level_err`   | Percentage of wrongly determined levels                                                               |
+| `exec_time`   | Execution time in seconds                                                                             |
