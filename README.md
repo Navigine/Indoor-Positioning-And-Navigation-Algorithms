@@ -86,7 +86,7 @@ Create the polygon of allowed area
     geoLevel.geometry = navigine::navigation_core::getGeometry(barriersList, levelArea);
 ```
 
-Create `LevelCollector` using method `createLevelCollector` and add all your geo levels.
+Create `LevelCollector` using method `createLevelCollector` and add all available geo levels.
 
 ```c++
     levelCollector = navigine::navigation_core::createLevelCollector();
@@ -113,14 +113,14 @@ The test application takes 3 parameters:
 
 In order to build the test application go to the root directory of the repository and execute the following commands
 
-```
+``` sh
 cmake -H. -Bbuild
 cmake --build build
 ```
 
 To run the tests
 
-```
+``` sh
 cd build/
 ./navigation_test location.geojson log.json settings.json
 ```
@@ -137,3 +137,11 @@ The most important among them are presented in the following table
 | `avr_fi`      | Average angle error in degrees                                                                        |
 | `level_err`   | Percentage of wrongly determined levels                                                               |
 | `exec_time`   | Execution time in seconds                                                                             |
+
+## Navigation Algorithms explanation
+
+Here are lectures on navigational algorithms used in this repository
+- [Navigine's demo of WIFI-RTT](https://www.youtube.com/watch?v=VAzMhld3bH0&t)
+- [Pedometer Algorithm Explained](https://www.youtube.com/watch?v=cpwrwPTqMac&t)
+- [Complementary Filter](https://www.youtube.com/watch?v=49mJcFc2xXw)
+- [Particle Filter](https://www.youtube.com/watch?v=JFZ-HARdZA8)
