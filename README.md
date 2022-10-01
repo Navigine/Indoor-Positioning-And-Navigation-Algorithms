@@ -1,6 +1,18 @@
+<h1 align="center">
+  <img src="resources/logo.jpg"
+  alt="Markdown Monster icon"/><br/>
+</h1>
+
 Indoor-navigation-algorithms  
 [![Build](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/ubuntu.yml) [![Build](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/macos.yml/badge.svg)](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/macos.yml)
 ============================
+
+Navigine team supports the Open Source initiative by offering part of the algorithms for building navigation and indoor tracking. We believe that our code could bring significant benefits to third-party software developers. We regularly test new R&D activities to create extremely precise navigation systems.
+Navigine’s mission in relation to Open Source is to act as experts in the field of navigation algorithms, helping the industry of indoor positioning to grow. 
+
+Precise indoor positioning algorithms are the key to implementation of the best location-based services and applications, with the main focus on indoor navigation developed by Navigine company. 
+
+Here we will step by step publish the source code of our algorithm starting with trilateration.
 
 ## Useful Links
 
