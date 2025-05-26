@@ -8,7 +8,7 @@
 #define NAVIGINE_POSITION_H
 
 #include <string>
-#include <navigine/navigation-core/point.h>
+#include <navigine/navigation-core/geometry.h>
 #include <navigine/navigation-core/navigation_output.h>
 #include <navigine/navigation-core/level.h>
 

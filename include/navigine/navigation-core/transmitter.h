@@ -3,50 +3,72 @@
 #include <string>
 #include <vector>
 #include <cmath>
-#include "declare_identifier.h"
-#include <navigine/navigation-core/point.h>
 
-namespace navigine {
-namespace navigation_core {
+#include <navigine/navigation-core/geometry.h>
+#include <navigine/navigation-core/utils.h>
+#include <navigine/navigation-core/math/math.h>
 
-struct PathlossModel
-{
-  double A;
-  double B;
-  double power;
+namespace navigine::navigation_core {
 
-  inline double operator()(double r) const {
-    static constexpr double MIN_DISTANCE = 0.01;
-    return A - B * std::log(std::max(r, MIN_DISTANCE));
-  }
+using TransmitterId = std::string;
+
+///
+/// TransmitterType
+///
+
+enum class TransmitterType {
+    WIFI,
+    BEACON,
+    BLUETOOTH,
+    EDDYSTONE,
+    LOCATOR,
+    UNKNOWN,
 };
 
-enum class TransmitterType { WIFI, BEACON, BLUETOOTH, UNKNOWN, EDDYSTONE, LOCATOR };
+TransmitterType transmitterTypeFromString(const std::string& type);
+std::string transmitterTypeToString(TransmitterType type);
 
-DECLARE_IDENTIFIER(TransmitterId)
+///
+/// TransmitterRssiModel
+///
+
+struct TransmitterRssiModel
+{
+    double paramA = -82.0;
+    double paramB = 3.0;
+    std::optional<double> rssiThreshold;
+    std::optional<double> rssiDeviation;
+};
+
+inline double RssiByDistance(double A, double B, double dist)
+{
+    static const auto MIN_DISTANCE = 0.01;
+    return A - 2 * B * math::log(std::max(dist, MIN_DISTANCE));
+}
+
+inline double DistanceByRssi(double A, double B, double rssi)
+{
+    return math::exp((A - rssi) / B / 2);
+}
+
+///
+/// Transmitter
+///
 
 template <typename Point>
-struct Transmitter 
+struct Transmitter
 {
-  Transmitter() = default;
-
-  Transmitter(TransmitterId _id, Point _p, PathlossModel _model, TransmitterType _type)
-    : id            ( _id    )
-    , point         ( _p     )
-    , pathlossModel ( _model )
-    , type          ( _type  )
-  { }
-
-  TransmitterId id;
-  Point point;
-  PathlossModel pathlossModel;
-  TransmitterType type;
-
-  bool operator== (const Transmitter& tx)const { return id == tx.id; }
-  bool operator<  (const Transmitter& tx)const { return id < tx.id; }
+    TransmitterId id;
+    TransmitterType type = TransmitterType::UNKNOWN;
+    TransmitterRssiModel rssiModel;
+    Point point;
+    std::optional<double> altitude;
 };
 
-typedef std::vector<Transmitter<XYZPoint>> XYZTransmitters;
-typedef std::vector<Transmitter<GeoPoint3D>> Geo3DTransmitters;
+using XYTransmitter = Transmitter<XYPoint>;
+using XYTransmitters = std::vector<XYTransmitter>;
 
-} } // namespace navigine::navigation_core
+using GeoTransmitter = Transmitter<GeoPoint>;
+using GeoTransmitters = std::vector<GeoTransmitter>;
+
+} // namespace navigine::navigation_core

@@ -1,70 +1,34 @@
-#ifndef POSITION_POSTPROCESSOR_H
-#define POSITION_POSTPROCESSOR_H
+#pragma once
 
-#include <navigine/navigation-core/motion_info.h>
-#include <navigine/navigation-core/navigation_settings.h>
 #include <navigine/navigation-core/level.h>
+#include <navigine/navigation-core/navigation_settings.h>
+#include <navigine/navigation-core/position.h>
 
-#include "../position.h"
-#include "navigation_time_smoother.h"
+#include "graph_snapper.h"
 #include "position_smoother.h"
 
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
 class PositionPostprocessor
 {
-  public:
-    ~PositionPostprocessor();
-    PositionPostprocessor(const NavigationSettings& navProps);
+public:
+    PositionPostprocessor(
+        const std::shared_ptr<const Level>& level,
+        const PositionEstimatorSettings::MotionModel& mmSettings,
+        const PositionEstimatorSettings::Postprocessor& ppSettings);
 
-    Position getProcessedPosition(const Position& fusedPos,
-      long long ts, const MotionInfo& motionInfo,
-      const Level& level);
+    std::optional<Position> processPosition(const Position& pos);
 
-    Position fusePositions(long long curTs, const Position& indoorPos, const Position& outdoorPos, const NavigationStatus& navStatus);
-    void fillIndoorOutdoorPositionStates(const Position& indoorPos, const Position& outdoorPos);
-    const Position getIndoorPosition() { return mIndoorPos; }
-    const Position getOutdoorPosition() { return mOutdoorPos; }
+private:
+    const std::shared_ptr<const Level> level_;
+    const bool useSmoothing_;
+    const bool useGraphProjection_;
+    const bool useProjectionToWhiteArea_;
+    const double maxProjectionDistance_;
+    const double maxProjectionSpeed_;
 
-  private:
-    bool isInsideMap(const Position& pos, const Level& level);
-
-    const bool mUseSmoothing;
-    const bool mUseStops;
-    const bool mUseInstantGpsPosition;
-    const bool mUseGps;
-    const bool mFuseGps;
-    const bool mUseGpsOutsideMap;
-    const bool mPreferIndoorSolution;
-    const bool mUseTimeSmoothing;
-    const bool mUseGraphProjection;
-
-    const long long mDeadReckonTimeMs;
-    const long long mStopUpdateTimeMs;
-    const long long mStopDetectionTimeMs;
-
-    const double mGraphProjectionDistance;
-    const double mPriorDev;
-    const double mFuseGpsBorderM;
-    const double mMotionSpeed;
-    const double mPosIsTooOldForFusingSec;
-    const double mStopsDistThresholdM;
-
-    double mIndoorDev;
-    double mOutdoorDev;
-
-    NavigationTimeSmoother mNavigationTimeSmoother;
-    PositionSmoother* mPositionSmoother;
-
-    Position mIndoorPos;
-    Position mOutdoorPos;
-    Position mLastOutPosition;
-
-    long long mLastExtractionTs = -1;
-    long long mLastStepTs = -1;
+    std::unique_ptr<PositionSmoother> positionSmoother_;
+    std::unique_ptr<GraphSnapper> graphSnapper_;
 };
 
-} } // namespace navigine::navigation_core
-
-#endif // POSITION_POSTPROCESSOR_H
+} // namespace navigine::navigation_core

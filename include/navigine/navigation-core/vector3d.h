@@ -1,74 +1,94 @@
-/** vector3d.h
-*
-** Copyv2 (c) 2018 Navigine. All v2s reserved.
-*
-*/
+#pragma once
 
-#ifndef NAVIGINE_VECTOR3D_H
-#define NAVIGINE_VECTOR3D_H
-
+#include <array>
 #include <cmath>
+#include <ostream>
 
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
-struct Vector3d
+class Vector3d
 {
-  double x;
-  double y;
-  double z;
+public:
+    Vector3d();
+    Vector3d(double x, double y, double z);
 
-  Vector3d(): x(0.0), y(0.0), z(0.0) { }
-  Vector3d(double _x, double _y, double _z);
+    bool isNull() const;
+    bool isFinite() const;
+    bool isBounded(double value) const;
 
-  double    magnitude()  const;
-  Vector3d  normalized()  const;
-  Vector3d& normalize();
-  bool      isNull() const;
+    void setZero();
 
-  static Vector3d crossProduct(const Vector3d& v1, const Vector3d& v2);
-  static double   dotProduct  (const Vector3d& v1, const Vector3d& v2);
+    double norm() const;
+    double squaredNorm() const;
+    Vector3d normalized() const;
+    Vector3d& normalize();
 
-  bool operator==(const Vector3d& v2);
-  bool operator!=(const Vector3d& v2);
+    bool operator==(const Vector3d& v2) const;
+    bool operator!=(const Vector3d& v2) const;
 
-  Vector3d& operator+=(const Vector3d& v2);
-  Vector3d& operator-=(const Vector3d& v2);
+    double dotProduct(const Vector3d& v) const;
+    double dotProduct(const double* values) const;
 
-  Vector3d& operator*=(double multiplier);
-  Vector3d& operator/=(double divisor);
+    Vector3d& operator+=(const Vector3d& v2);
+    Vector3d& operator-=(const Vector3d& v2);
+    Vector3d& operator*=(double multiplier);
+    Vector3d& operator/=(double divisor);
+    Vector3d& addMul(const Vector3d& v, double multiplier);
+
+    inline double& at(unsigned int index) {
+        return data_[index];
+    }
+
+    inline double at(unsigned int index) const {
+        return data_[index];
+    }
+
+    inline double* data() {
+        return data_.data();
+    }
+
+    inline const double* data() const {
+        return data_.data();
+    }
+
+    static Vector3d zero();
+    static Vector3d crossProduct(const Vector3d& v1, const Vector3d& v2);
+    static double dotProduct(const Vector3d& v1, const Vector3d& v2);
+
+private:
+    std::array<double, 3> data_;
 };
 
 inline Vector3d operator*(double multiplier, const Vector3d& v)
 {
-  return Vector3d(v.x * multiplier, v.y * multiplier, v.z * multiplier);
+    return Vector3d(v.at(0) * multiplier, v.at(1) * multiplier, v.at(2) * multiplier);
 }
 
 inline Vector3d operator*(const Vector3d& v, double multiplier)
 {
-  return Vector3d(v.x * multiplier, v.y * multiplier, v.z * multiplier);
+    return Vector3d(v.at(0) * multiplier, v.at(1) * multiplier, v.at(2) * multiplier);
 }
 
 inline Vector3d operator+(const Vector3d& v1, const Vector3d& v2)
 {
-  return Vector3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+    return Vector3d(v1.at(0) + v2.at(0), v1.at(1) + v2.at(1), v1.at(2) + v2.at(2));
 }
 
 inline Vector3d operator-(const Vector3d& v1, const Vector3d& v2)
 {
-  return Vector3d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+    return Vector3d(v1.at(0) - v2.at(0), v1.at(1) - v2.at(1), v1.at(2) - v2.at(2));
 }
 
 inline Vector3d operator-(const Vector3d& v)
 {
-  return Vector3d(-v.x, -v.y, -v.z);
+    return Vector3d(-v.at(0), -v.at(1), -v.at(2));
 }
 
-inline Vector3d operator/(const Vector3d& v1, double divisor)
+inline Vector3d operator/(const Vector3d& v, double divisor)
 {
-  return Vector3d(v1.x / divisor, v1.y / divisor, v1.z / divisor);
+    return Vector3d(v.at(0) / divisor, v.at(1) / divisor, v.at(2) / divisor);
 }
 
-} } // namespace navigine::navigation_core
+std::ostream& operator<<(std::ostream& os, const Vector3d& v);
 
-#endif // NAVIGINE_VECTOR3D_H
+} // namespace navigine::navigation_core

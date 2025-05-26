@@ -1,121 +1,319 @@
-#ifndef NAVIGINE_NAVIGATION_SETTINGS_H
-#define NAVIGINE_NAVIGATION_SETTINGS_H
+#pragma once
 
-#include <map>
-#include <vector>
-#include <memory>
-#include <sstream>
+#include <navigine/navigation-core/serialization/serialization.h>
+#include <navigine/navigation-core/utils.h>
 
-#include <navigine/navigation-core/level.h>
+namespace navigine::navigation_core {
 
-namespace navigine {
-namespace navigation_core {
+struct ProviderSelectorSettings
+{
+    static constexpr auto DEFAULT_CURRENT_INDEX_HANDICAP = 1.0;
+    static constexpr auto DEFAULT_UPDATE_INTERVAL = 1.0;
+    static constexpr auto DEFAULT_WINDOW_COUNT = 5U;
 
-struct CommonSettings {
-    enum class UseAlgorithm { PF_PDR, PF_NOPDR, ZONES, GRAPH, KNN }; //PF_PDR, PF_NOPDR, ZONES, GRAPH, KNN
-    enum class MeasurementType { RSSI, DISTANCE_V1, DISTANCE_V2 }; // rssi, distance_21, distance_v2
-    enum class SignalsToUse { BLE, WIFI, BOTH }; //ble, wifi, both
-
-    UseAlgorithm useAlgorithm       = UseAlgorithm::PF_PDR; // "Use_algorithm"
-    double      lklCorrectionNoise  = 10.0;          // "Correction_noise"
-    bool        useEnuAzimuth       = false;         // "Use_enu_azimuth"
-    bool        useDifferentionMode = false;         // "Differention_mode"
-    bool        useTxPower          = false;         // "Use_beacon_power"
-    bool        useRadiomap         = false;         // "Use_radiomap"
-    bool        useStops            = false;         // "Use_stops"
-    bool        useTracking         = false;         // "Use_tracking"
-    double      stopDetectionTime   = 3.0;           // "Stop_detection_time"
-    double      minDeviationM       = 1.0;           // "Min_deviation_m"
-    double      averageMovSpeed     = 1.0;           // "Average_speed"
-    MeasurementType measurementType = MeasurementType::RSSI; // "Measurement_type"
-
-    bool useBestRefPointLevel = false;              // "Use_best_ref_point_level"
-    bool useBarometer         = false;              // "Use_barometer"
-
-    bool   useUnknownTransmitters = false;            // "Use_unknown_beacons"
-    double sigCutOffRss           = -100;             // "Cutoff_rss"
-    bool   useClosestAps          = false;            // "Use_closest_aps"
-    unsigned int numClosestAps    = 1;                // "N_closest_aps"
-    double sigAveragingTime       = 1.0;              // "Sig_averaging_time"
-    double sigWindowShift         = 0.0;              // "Sig_window_shift"
-    SignalsToUse signalsToUse     = SignalsToUse::BLE; // "Use_Signals"
-
-    unsigned int numParticles             = 1000;    // "N_particles"
-    unsigned int minMsrNumForMutation     = 3;       // "Min_msr_num_for_mutation"
-    double resamplingThreshold            = 600.0;   // "Resampling_threshold_num", Level
-    unsigned int minNumParticlesAlive     = 100;     // "Min_num_of_particles", Level
-    double gyroNoiseDegree                = 4.0;     // "Gyro_noise_degree"
-    double stepNoiseDeviationMeters       = 0.4;     // "Step_noise_deviation_meters"
-    bool   useProjectionToWhiteArea       = false;   // "Use_projection_to_white_area"
-
-    unsigned int numParticlesAroundClosestAp    = 10;      // "N_particles_around_closest_AP"
-    unsigned int numParticlesToMutate           = 50;      // "N_particles_to_mutate"
-    unsigned int numSamplingAttempts            = 60;      // "Num_sampling_attempts"
-    unsigned int numInitializationAttempts      = 500;     // "Num_initialization_attempts"
-    bool   useUniformSampling                   = false;   // "Use_uniform_sampling"
-
-    unsigned int kNeighbors                        = 8;      // "K_neighbors"
-    bool   useTriangles                               = true;   // "Use_triangles"
-    bool   useDiffMode                                = true;   // "Use_diff_mode"
-    unsigned int minNumOfMeasurementsForPositionCalculation = 4;      // "Min_num_of_measurements_for_position_calculation"
-
-    double smoothing                           = 0.5;    // "Smoothing"
-    double deadReckoningTime                   = 5.0;    // "Dead_reckon_time"
-    double stopUpdateTime                      = 4.0;    // "Stop_update_time"
-    double graphProjDist                       = 5.0;    // "Graph_prog_distance"
-    double useStopsDistanceThresholdM          = 10.0;   // "Stopped_distance_threshold_m"
-                                                                      // if distance between stopped position and current position
-                                                                      // is more than the threshold - update stopped position
-
-    bool   useSmoothing                        = true;    // "Use_smoothing"
-    bool   useGraphProjection                  = false;   // "Use_graph_projection"
-    bool   useAccuracyForSmoothing             = false;   // "Use_accuracy_for_smoothing"
-    bool   useSpeedConstraint                  = true;    // "Use_speed_constraint"
-    bool   useBarriers                         = false;   // "Use_barriers"
-    bool   useTimeSmoothing                    = false;   // "Use_time_smoothing"
-    bool   useAbFilter                         = true;    // "Use_ab_filter"
-
-    bool   useAltitude                         = false;  // "Use_altitude"
-    bool   useGps                              = false;  // "Use_gps"
-    bool   useInstantGpsPosition               = false;  // "Use_instant_gps_position"
-    bool   preferIndoorSolution                = false;  // "Prefer_indoor_solution"
-    bool   fuseGps                             = false;  // "Fuse_gps"
-    bool   useGpsOutsideMap                    = false;  // "Use_gps_outside_map"
-    bool   useGpsSigmaFilter                   = false;  // "Use_gps_sigma_filter"
-    unsigned int sigmaFilterWindow             = 1;      // "Sigma_filter_window"
-    double sigmaFilterDelta                    = 0.0;    // "Sigma_filter_delta"
-    unsigned int minNumSats                    = 20;     // "Min_num_sats"
-
-    double priorDeviation                      = 50.0;   // "Prior_deviation"
-    double minGpsDeviation                     = 5.0;    // "Gps_deviation"
-    double maxGpsDeviation                     = std::numeric_limits<double>::infinity(); // Maximum_to_accept_gps_measurement"
-    double fuseGpsBorderM                      = 10;     // "Fuse_gps_border"
-    long long noSignalTimeThreshold            = 35;     // "No_signal_time_threshold"
-    long long noActionTimeThreshold            = 20;     // "No_action_time_threshold"
-    double positionIsTooOldSec                 = 20.0;   // "Position_old_for_fusing_sec"
-    double gpsValidTimeWindowSec               = 1.0;    // "Gps_valid_time_window_sec"
-
-    bool   useCalculatedAzimuth                = false; // "Use_calculated_azimuth"
-    double deviceAzimuthLifetimeSeconds        = 10.0;  // "Device_azimuth_lifetime_seconds"
-    double stepMultiplier                      = 1.0;   // "Step_multiplier"
-
-    bool hasAccelerometer = true;                      // "Has_accelerometer"
-    bool hasGyroscope = true;                          // "Has_gyroscope"
-
-    double wiFiRttOffset = -1.5;                     // "WiFi_RTT_Offset"
+    std::optional<double> currentIndexHandicap;
+    std::optional<double> updateInterval;       // Interval between subsequent provider updates (unit: sec)
+    std::optional<unsigned int> windowCount;    // Number of windows taken into consideration
 };
 
-struct LevelSettings {
-    double normalModeA = -82.0;                      // "GP_Normal_Mode", "A", Level
-    double normalModeB =  3.0;                       // "GP_Normal_Mode", "B", Level
+struct PositionEstimatorSettings
+{
+    struct Common
+    {
+        enum class UseAlgorithm {
+            PF_PDR,
+            PF_ADR,
+            PF_PDR_KALMAN,
+            PF_ADR_KALMAN,
+            PF_GRAPH,
+            LSM,
+            LSM_PDR_KALMAN,
+            LSM_ADR_KALMAN,
+            ZONES,
+            OUTDOOR,
+            OUTDOOR_PDR_KALMAN,
+            OUTDOOR_ADR_KALMAN,
+            OUTDOOR_LC_KALMAN};
+
+        static constexpr auto DEFAULT_CORRECTION_OFFSET_RSSI = 0.0;
+        static constexpr auto DEFAULT_CORRECTION_OFFSET_RTT = 0.0;
+        static constexpr auto DEFAULT_CUTOFF_RSSI = -100.0;
+        static constexpr auto DEFAULT_DEAD_RECKONING_TIME_THRESHOLD = 35.0;
+        static constexpr auto DEFAULT_USE_ALGORITHM = UseAlgorithm::PF_PDR;
+        static constexpr auto DEFAULT_USE_GPS = false;
+        static constexpr auto DEFAULT_USE_BLE = true;
+        static constexpr auto DEFAULT_USE_WIFI = true;
+        static constexpr auto DEFAULT_USE_WIFI_RTT = true;
+        static constexpr auto DEFAULT_USE_TX_POWER = true;
+        static constexpr auto DEFAULT_USE_TX_RSSI_THRESHOLD = true;
+
+        std::optional<double> correctionOffsetRssi;     // Unit: dBm
+        std::optional<double> correctionOffsetRtt;      // Unit: meters
+        std::optional<double> cutOffRssi;
+        std::optional<double> deadReckoningTimeThreshold;
+        std::optional<UseAlgorithm> useAlgorithm;
+        std::optional<bool> useGps;
+        std::optional<bool> useBle;
+        std::optional<bool> useWifi;
+        std::optional<bool> useWifiRtt;
+        std::optional<bool> useTxRssiThreshold;
+    };
+
+    struct MotionModel
+    {
+        static constexpr auto DEFAULT_USE_ACCELEROMETER = true;
+        static constexpr auto DEFAULT_USE_GYROSCOPE = true;
+        static constexpr auto DEFAULT_USE_MAGNETOMETER = true;
+        static constexpr auto DEFAULT_USE_ODOMETER = true;
+        static constexpr auto DEFAULT_USE_STOP_DETECTION = true;
+        static constexpr auto DEFAULT_USE_SPEED_CONSTRAINT = true;
+        static constexpr auto DEFAULT_GYROSCOPE_NOISE_DEVIATION = 4.0;
+        static constexpr auto DEFAULT_MAGNETOMETER_NOISE_DEVIATION = 90.0;
+        static constexpr auto DEFAULT_ODOMETER_NOISE_DEVIATION = 0.139; // 0.5 km/h
+        static constexpr auto DEFAULT_STEP_NOISE_DEVIATION = 0.4;
+        static constexpr auto DEFAULT_STOP_DETECTION_TIME = 3.0;
+        static constexpr auto DEFAULT_SPEED_CONSTRAINT_HORIZONTAL = 2.0;
+        static constexpr auto DEFAULT_SPEED_CONSTRAINT_VERTICAL = 0.0;
+        static constexpr auto DEFAULT_MOTION_SPEED = 1.0;
+
+        std::optional<bool> useAccelerometer;
+        std::optional<bool> useGyroscope;
+        std::optional<bool> useMagnetometer;
+        std::optional<bool> useOdometer;
+        std::optional<bool> useStopDetection;
+        std::optional<bool> useSpeedConstraint;
+        std::optional<double> gyroscopeNoiseDeviation;      // Unit: deg/s
+        std::optional<double> magnetometerNoiseDeviation;   // Unit: deg
+        std::optional<double> odometerNoiseDeviation;       // Unit: m/s
+        std::optional<double> stepNoiseDeviation;           // Unit: meters
+        std::optional<double> stopDetectionTime;            // Unit: sec
+        std::optional<double> speedConstraintHorizontal;    // Unit: m/s
+        std::optional<double> speedConstraintVertical;      // Unit: m/s
+        std::optional<double> motionSpeed;                  // Unit: m/s
+    };
+
+    struct ParticleFilter
+    {
+        static constexpr auto DEFAULT_USE_HEADING_CORRECTION = false;
+        static constexpr auto DEFAULT_CORRECTION_NOISE_RSSI = 3.0;
+        static constexpr auto DEFAULT_CORRECTION_NOISE_RTT = 3.0;
+        static constexpr auto DEFAULT_CORRECTION_NOISE_GPS = 10.0;
+        static constexpr auto DEFAULT_MIN_DEVIATION = 1.0;
+        static constexpr auto DEFAULT_MAX_DISTANCE_THRESHOLD_RSSI = 40.0;
+        static constexpr auto DEFAULT_MAX_DISTANCE_THRESHOLD_RTT = 100.0;
+        static constexpr auto DEFAULT_MIN_MSR_NUM_FOR_UPDATE = 1U;
+        static constexpr auto DEFAULT_MIN_MSR_NUM_FOR_MUTATION = 3U;
+        static constexpr auto DEFAULT_NUM_CLOSEST_TXS = 5U;
+        static constexpr auto DEFAULT_NUM_PARTICLES = 1000U;
+        static constexpr auto DEFAULT_NUM_PARTICLES_TO_MUTATE_RATE = 0.05;
+        static constexpr auto DEFAULT_NUM_PARTICLES_AROUND_CLOSEST_TXS_RATE = 0.01;
+        static constexpr auto DEFAULT_NUM_PARTICLES_ALIVE_THRESHOLD_RATE = 0.1;
+        static constexpr auto DEFAULT_RESAMPLING_THRESHOLD_RATE = 0.6;
+        static constexpr auto DEFAULT_SIG_AVERAGING_TIME = 1.0;
+        static constexpr auto DEFAULT_UPDATE_INTERVAL = 1.0;
+        static constexpr auto DEFAULT_WALL_PASSING_PROBABILITY = 0.0;
+
+        std::optional<bool> useHeadingCorrection;
+        std::optional<double> correctionNoiseRssi;      // Unit: dimensionless
+        std::optional<double> correctionNoiseRtt;       // Unit: dimensionless
+        std::optional<double> correctionNoiseGps;       // Unit: dimensionless
+        std::optional<double> maxDistanceThresholdRssi; // Unit: meters
+        std::optional<double> maxDistanceThresholdRtt;  // Unit: meters
+        std::optional<double> minDeviation;             // Unit: meters
+        std::optional<unsigned int> minMsrNumForUpdate;
+        std::optional<unsigned int> minMsrNumForMutation;
+        std::optional<unsigned int> numClosestTxs;
+        std::optional<unsigned int> numParticles;
+        std::optional<double> numParticlesToMutateRate;
+        std::optional<double> numParticlesAroundClosestTxsRate;
+        std::optional<double> numParticlesAliveThresholdRate;
+        std::optional<double> resamplingThresholdRate;
+        std::optional<double> sigAveragingTime;         // Unit: sec
+        std::optional<double> updateInterval;           // Unit: sec
+        std::optional<double> wallPassingProbability;   // Unit: probability in interval [0,1]
+    };
+
+    struct LsmSolver
+    {
+        static constexpr auto DEFAULT_MAX_DEVIATION_FOR_UPDATE = 3.0;
+        static constexpr auto DEFAULT_MIN_DEVIATION = 1.0;
+        static constexpr auto DEFAULT_MIN_MSR_NUM_FOR_UPDATE = 3U;
+        static constexpr auto DEFAULT_SIG_AVERAGING_TIME = 1.0;
+        static constexpr auto DEFAULT_UPDATE_INTERVAL = 1.0;
+
+        std::optional<double> maxDeviationForUpdate;        // Unit: meters
+        std::optional<double> minDeviation;                 // Unit: meters
+        std::optional<unsigned int> minMsrNumForUpdate;
+        std::optional<double> sigAveragingTime;             // Unit: sec
+        std::optional<double> updateInterval;               // Unit: sec
+    };
+
+    struct ZoneSolver
+    {
+        static constexpr auto DEFAULT_MIN_DEVIATION = 1.0;
+        static constexpr auto DEFAULT_SIG_AVERAGING_TIME = 1.0;
+        static constexpr auto DEFAULT_UPDATE_INTERVAL = 1.0;
+
+        std::optional<double> minDeviation;         // Unit: meters
+        std::optional<double> sigAveragingTime;     // Unit: sec
+        std::optional<double> updateInterval;       // Unit: sec
+    };
+
+    struct Outdoor
+    {
+        static constexpr auto DEFAULT_GPS_MIN_DEVIATION = 5.0;
+        static constexpr auto DEFAULT_GPS_MAX_DEVIATION_THRESHOLD = 1000.0;
+        static constexpr auto DEFAULT_GPS_ZONE_FILTER_BUFFER = 10.0;
+        static constexpr auto DEFAULT_GPS_MIN_NUM_SATS_THRESHOLD = 20U;
+        static constexpr auto DEFAULT_SIGMA_FILTER_WINDOW = 5U;
+        static constexpr auto DEFAULT_SIGMA_FILTER_DELTA = 3.0;
+        static constexpr auto DEFAULT_USE_GPS_SIGMA_FILTER = false;
+        static constexpr auto DEFAULT_USE_GPS_ZONE_FILTER = false;
+
+        std::optional<double> gpsMinDeviation;
+        std::optional<double> gpsMaxDeviationThreshold;
+        std::optional<double> gpsZoneFilterBuffer;
+        std::optional<unsigned int> gpsMinNumSatsThreshold;
+        std::optional<unsigned int> sigmaFilterWindow;
+        std::optional<double> sigmaFilterDelta;
+        std::optional<bool> useGpsSigmaFilter;
+        std::optional<bool> useGpsZoneFilter;
+    };
+
+    struct KalmanFilter
+    {
+        static constexpr auto DEFAULT_ACCURACY_HORIZONTAL_FACTOR = 1.0;
+        static constexpr auto DEFAULT_ACCURACY_VERTICAL_FACTOR = 1.7;
+        static constexpr auto DEFAULT_ACCURACY_ODOMETER_FACTOR = 1.0;
+        static constexpr auto DEFAULT_ACCURACY_VELOCITY_FACTOR = 1.0;
+        static constexpr auto DEFAULT_ACCURACY_TRACK_ANGLE_FACTOR = 1.0;
+        static constexpr auto DEFAULT_ACCELEROMETER_NOISE_PSD_DB = -50.0;
+        static constexpr auto DEFAULT_ACCELEROMETER_BIAS_PSD_DB = -50.0;
+        static constexpr auto DEFAULT_GYROSCOPE_NOISE_PSD_DB = -100.0;
+        static constexpr auto DEFAULT_GYROSCOPE_BIAS_PSD_DB = -100.0;
+        static constexpr auto DEFAULT_ALIGNMENT_INTERVAL = 1.0;
+        static constexpr auto DEFAULT_CORRECTION_INTERVAL_GPS = 1.0;
+        static constexpr auto DEFAULT_CORRECTION_INTERVAL_ODO = 1.0;
+        static constexpr auto DEFAULT_UPDATE_INTERVAL = 0.01;
+        static constexpr auto DEFAULT_USE_BIAS_ACCELEROMETER = true;
+        static constexpr auto DEFAULT_USE_BIAS_GYROSCOPE = true;
+        static constexpr auto DEFAULT_USE_CORRECTION_GPS = true;
+        static constexpr auto DEFAULT_USE_CORRECTION_ODO = true;
+        static constexpr auto DEFAULT_USE_CORRECTION_TRACK_ANGLE = true;
+
+        std::optional<double> accuracyHorizontalFactor;     // Unit: dimensionless
+        std::optional<double> accuracyVerticalFactor;       // Unit: dimensionless
+        std::optional<double> accuracyOdometerFactor;       // Unit: dimensionless
+        std::optional<double> accuracyVelocityFactor;       // Unit: dimensionless
+        std::optional<double> accuracyTrackAngleFactor;     // Unit: dimensionless
+        std::optional<double> accelerometerNoisePsdDb;      // Unit: Db (aka 10 * log10(psd in m^2/sec^3))
+        std::optional<double> accelerometerBiasPsdDb;       // Unit: Db (aka 10 * log10(psd in m^2/sec^5))
+        std::optional<double> gyroscopeNoisePsdDb;          // Unit: Db (aka 10 * log10(psd in rad^2/sec))
+        std::optional<double> gyroscopeBiasPsdDb;           // Unit: Db (aka 10 * log10(psd in rad^2/sec^3))
+        std::optional<double> alignmentInterval;            // Unit: sec
+        std::optional<double> correctionIntervalGps;        // Unit: sec
+        std::optional<double> correctionIntervalOdo;        // Unit: sec
+        std::optional<double> updateInterval;               // Unit: sec
+        std::optional<bool> useBiasAccelerometer;
+        std::optional<bool> useBiasGyroscope;
+        std::optional<bool> useCorrectionGps;
+        std::optional<bool> useCorrectionOdo;
+        std::optional<bool> useCorrectionTrackAngle;
+    };
+
+    struct Postprocessor
+    {
+        static constexpr auto DEFAULT_MAX_PROJECTION_DISTANCE = 5.0;
+        static constexpr auto DEFAULT_MAX_PROJECTION_SPEED = 0.0;
+        static constexpr auto DEFAULT_SMOOTHING_COEFFICIENT = 0.5;
+        static constexpr auto DEFAULT_USE_ACCURACY_FOR_SMOOTHING = false;
+        static constexpr auto DEFAULT_USE_GRAPH_PROJECTION = false;
+        static constexpr auto DEFAULT_USE_PROJECTION_TO_WHITE_AREA = false;
+        static constexpr auto DEFAULT_USE_SMOOTHING = true;
+
+        std::optional<double> maxProjectionDistance;
+        std::optional<double> maxProjectionSpeed;
+        std::optional<double> smoothingCoefficient;
+        std::optional<bool> useAccuracyForSmoothing;
+        std::optional<bool> useGraphProjection;
+        std::optional<bool> useProjectionToWhiteArea;
+        std::optional<bool> useSmoothing;
+    };
+
+    struct LevelEvaluation
+    {
+        static constexpr auto DEFAULT_NUM_CLOSEST_TXS = 3U;
+        static constexpr auto DEFAULT_RSSI_TX_BONUS = 5.0;
+        static constexpr auto DEFAULT_SIG_AVERAGING_TIME = 10.0;
+        static constexpr auto DEFAULT_UPDATE_INTERVAL = 1.0;
+        static constexpr auto DEFAULT_WEIGHT_RSSI = 0.20;
+        static constexpr auto DEFAULT_WEIGHT_GPS = 0.05;
+        static constexpr auto DEFAULT_WEIGHT_EXTERNAL = 0.75;
+
+        std::optional<unsigned int> numClosestTxs;      // Maximum number of transmitters taken into consideration within the evaluation window
+        std::optional<double> rssiTxBonus;              // Bonus for every transmitter within evaluation window (dBm)
+        std::optional<double> sigAveragingTime;         // Unit: sec
+        std::optional<double> updateInterval;           // Unit: sec
+        std::optional<double> weightRssi;               // Unit: [0,1]
+        std::optional<double> weightGps;                // Unit: [0,1]
+        std::optional<double> weightExternal;           // Unit: [0,1]
+    };
+
+    Common common;
+    ParticleFilter particleFilter;
+    LsmSolver lsmSolver;
+    ZoneSolver zoneSolver;
+    Outdoor outdoor;
+    MotionModel motionModel;
+    KalmanFilter kalmanFilter;
+    Postprocessor postprocessor;
+    LevelEvaluation levelEvaluation;
 };
 
 struct NavigationSettings
 {
-    CommonSettings commonSettings;
-    std::map<LevelId, LevelSettings> levelsSettings;
+    ProviderSelectorSettings providerSelector;
+    PositionEstimatorSettings defaultPositionEstimator;
+    std::map<LevelId, PositionEstimatorSettings> positionEstimators;
 };
 
-} } // namespace navigine::navigation_core
+// Navigation settings raw data representation.
+struct NavigationSettingsData
+{
+    serialization::KVStorage common;
+    std::map<LevelId, serialization::KVStorage> levels;
+};
 
-#endif // NAVIGINE_NAVIGATION_SETTINGS_H
+// Parsing navigation settings from raw data.
+NavigationSettings parseNavigationSettingsFromRawData(
+    const NavigationSettingsData& settingsData,
+    std::vector<std::string>& errors);
+
+// Parsing navigation settings from JSON data.
+NavigationSettings parseNavigationSettingsFromJsonData(
+    const std::string& data,
+    std::vector<std::string>& errors);
+
+// Parsing navigation settings from JSON file.
+NavigationSettings parseNavigationSettingsFromJsonFile(
+    const std::string& filename,
+    std::vector<std::string>& errors);
+
+// Dump navigation settings to raw data.
+NavigationSettingsData dumpNavigationSettingsToRawData(
+    const NavigationSettings& settings);
+
+std::string dumpNavigationSettingsRawDataToJson(
+    const NavigationSettingsData& settings,
+    const int indent = -1);
+
+// Dump navigation settings to JSON data.
+std::string dumpNavigationSettingsToJsonData(
+    const NavigationSettings& settings,
+    const int indent = -1);
+
+PositionEstimatorSettings getPositionEstimatorSettings(
+    const NavigationSettings& settings,
+    const LevelId& levelId);
+
+} // namespace navigine::navigation_core

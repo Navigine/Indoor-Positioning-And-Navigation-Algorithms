@@ -8,9 +8,9 @@
 #define NAVIGINE_NAVIGATION_STATE_H
 
 #include <vector>
-#include "navigation_input.h"
-#include <navigine/navigation-core/point.h>
-#include "xy_particle.h"
+#include "measurement.h"
+#include <navigine/navigation-core/geometry.h>
+#include "particle.h"
 
 namespace navigine {
 namespace navigation_core {

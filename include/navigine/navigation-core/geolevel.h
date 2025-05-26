@@ -1,39 +1,42 @@
-/** geolevel.h
-*
-* Copyright (c) 2019 Navigine.
-*
-*/
-
-#ifndef NAVIGINE_GEOLEVEL_H
-#define NAVIGINE_GEOLEVEL_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include <map>
-#include <unordered_map>
 
-#include "level.h"
-#include "level_geometry.h"
-#include "boost_geometry_adaptation.h"
-#include "graph.h"
-#include "reference_point.h"
-#include "transmitter.h"
+#include <navigine/navigation-core/geometry.h>
+#include <navigine/navigation-core/graph.h>
+#include <navigine/navigation-core/level.h>
+#include <navigine/navigation-core/reference_point.h>
+#include <navigine/navigation-core/transmitter.h>
+#include <navigine/navigation-core/utils.h>
 
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
 struct GeoLevel
 {
-  LevelId id;
-  Geo3DTransmitters transmitters;
-  GeoReferencePoints referencePoints;
-  LevelGeometry geometry;
-  Graph<GeoPoint> graph;
-  double altitude;
+    LevelId id;
+    GeoTransmitters transmitters;
+    GeoReferencePoints referencePoints;
+    GeoMultiPolygon geometry;
+    GeoGraph graph;
+    std::optional<double> altitude;
 };
 
-typedef std::vector<std::shared_ptr<GeoLevel> > GeoLevels;
+typedef std::vector<GeoLevel> GeoLevels;
 
-} } // namespace navigine::navigation_core
+// Parse geolevels from geojson data.
+// Throws std::runtime_error on parse error.
+GeoLevels parseGeoLevelsFromData(const std::string& data);
 
-#endif // NAVIGINE_GEOLEVEL_H
+// Parse geolevels from geojson file.
+// Throws std::runtime_error on parse error.
+GeoLevels parseGeoLevelsFromFile(const std::string& filename);
+
+// Serialize geolevels
+std::string dumpGeoLevelsToData(const GeoLevels& geoLevels);
+
+// Dump geolevels to file
+void dumpGeoLevelsToFile(const GeoLevels& geoLevels, const std::string& filename);
+
+} // namespace navigine::navigation_core

@@ -5,8 +5,8 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 
-#include <navigine/navigation-core/point.h>
-#include "xy_particle.h"
+#include <navigine/navigation-core/geometry.h>
+#include "particle.h"
 
 BOOST_GEOMETRY_REGISTER_POINT_2D(navigine::navigation_core::XYPoint, double, boost::geometry::cs::cartesian, x, y);
 BOOST_GEOMETRY_REGISTER_POINT_2D(navigine::navigation_core::XYParticle, double, boost::geometry::cs::cartesian, x, y);

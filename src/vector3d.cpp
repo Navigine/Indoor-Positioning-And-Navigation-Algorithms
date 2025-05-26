@@ -1,107 +1,169 @@
-/** vector3d.cpp
-*
-** Copyright (c) 2018 Navigine.
-*
-*/
-
+#include <cmath>
 #include <limits>
+
+// #include <navigine/navigation_core/math/math.h>
 #include <navigine/navigation-core/vector3d.h>
+#include <navigine/navigation-core/utils.h>
 
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
-namespace {
-static constexpr double DOUBLE_EPSILON = 1e-8;
+Vector3d::Vector3d()
+{
+    setZero();
 }
 
-Vector3d::Vector3d(double _x, double _y, double _z)
+Vector3d::Vector3d(double x, double y, double z)
 {
-  x = _x;
-  y = _y;
-  z = _z;
+    data_[0] = x;
+    data_[1] = y;
+    data_[2] = z;
 }
 
-double Vector3d::magnitude() const
+void Vector3d::setZero()
 {
-  return std::sqrt(x*x + y*y + z*z);
+    data_[0] = data_[1] = data_[2] = 0.0;
+}
+
+double Vector3d::norm() const
+{
+    return std::sqrt(squaredNorm());
+}
+
+double Vector3d::squaredNorm() const
+{
+    return data_[0] * data_[0] + data_[1] * data_[1] + data_[2] * data_[2];
 }
 
 Vector3d Vector3d::normalized() const
 {
-  double length = this->magnitude();
-  return (std::fabs(length) > std::numeric_limits<double>::epsilon())
-    ? Vector3d(x / length, y / length, z / length)
-    : *this;
+    const auto length = norm();
+    if (length > std::numeric_limits<double>::epsilon()) {
+        return Vector3d(
+            data_[0] / length,
+            data_[1] / length,
+            data_[2] / length);
+    }
+    return *this;
 }
 
 Vector3d& Vector3d::normalize()
 {
-  double length = this->magnitude();
-  
-  if (std::fabs(length) > std::numeric_limits<double>::epsilon())
-    *this /= length;
-  return *this;
+    const auto length = norm();
+    if (length > std::numeric_limits<double>::epsilon()) {
+        data_[0] /= length;
+        data_[1] /= length;
+        data_[2] /= length;
+    }
+    return *this;
 }
 
 bool Vector3d::isNull() const
 {
-  return x == 0 && y == 0 && z == 0;
+    return data_[0] == 0.0 &&
+           data_[1] == 0.0 &&
+           data_[2] == 0.0;
 }
 
-bool Vector3d::operator==(const Vector3d& v)
+bool Vector3d::isFinite() const
 {
-  return std::fabs(this->x - v.x) < DOUBLE_EPSILON &&
-         std::fabs(this->y - v.y) < DOUBLE_EPSILON &&
-         std::fabs(this->z - v.z) < DOUBLE_EPSILON;
+    return std::isfinite(data_[0]) &&
+           std::isfinite(data_[1]) &&
+           std::isfinite(data_[2]);
 }
 
-bool Vector3d::operator!=(const Vector3d& v)
+bool Vector3d::isBounded(double value) const
 {
-  return !(*this == v);
+    return std::isfinite(data_[0]) && std::fabs(data_[0]) <= value &&
+           std::isfinite(data_[1]) && std::fabs(data_[1]) <= value &&
+           std::isfinite(data_[2]) && std::fabs(data_[2]) <= value;
+}
+
+double Vector3d::dotProduct(const Vector3d& v) const
+{
+    return data_[0] * v.data_[0] + data_[1] * v.data_[1] + data_[2] * v.data_[2];
+}
+
+double Vector3d::dotProduct(const double* values) const
+{
+    return data_[0] * values[0] + data_[1] * values[1] + data_[2] * values[2];
+}
+
+bool Vector3d::operator==(const Vector3d& v) const
+{
+    return data_[0] == v.data_[0] &&
+           data_[1] == v.data_[1] &&
+           data_[2] == v.data_[2];
+}
+
+bool Vector3d::operator!=(const Vector3d& v) const
+{
+    return data_[0] != v.data_[0] ||
+           data_[1] != v.data_[1] ||
+           data_[2] != v.data_[2];
 }
 
 Vector3d& Vector3d::operator+=(const Vector3d& v)
 {
-  this->x += v.x;
-  this->y += v.y;
-  this->z += v.z;
-  return *this;
+    data_[0] += v.data_[0];
+    data_[1] += v.data_[1];
+    data_[2] += v.data_[2];
+    return *this;
 }
 
 Vector3d& Vector3d::operator-=(const Vector3d& v)
 {
-  this->x -= v.x;
-  this->y -= v.y;
-  this->z -= v.z;
-  return *this;
+    data_[0] -= v.data_[0];
+    data_[1] -= v.data_[1];
+    data_[2] -= v.data_[2];
+    return *this;
 }
 
 Vector3d& Vector3d::operator*=(double multiplier)
 {
-  this->x *= multiplier;
-  this->y *= multiplier;
-  this->z *= multiplier;
-  return *this;
+    data_[0] *= multiplier;
+    data_[1] *= multiplier;
+    data_[2] *= multiplier;
+    return *this;
 }
 
 Vector3d& Vector3d::operator/=(double divisor)
 {
-  this->x /= divisor;
-  this->y /= divisor;
-  this->z /= divisor;
-  return *this;
+    data_[0] /= divisor;
+    data_[1] /= divisor;
+    data_[2] /= divisor;
+    return *this;
 }
 
-double Vector3d::dotProduct(const Vector3d& v1, const Vector3d& v2)
+Vector3d& Vector3d::addMul(const Vector3d& v, double multiplier)
 {
-  return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    data_[0] += v.data_[0] * multiplier;
+    data_[1] += v.data_[1] * multiplier;
+    data_[2] += v.data_[2] * multiplier;
+    return *this;
+}
+
+Vector3d Vector3d::zero()
+{
+    return Vector3d(0, 0, 0);
 }
 
 Vector3d Vector3d::crossProduct(const Vector3d& v1, const Vector3d& v2)
 {
-  return Vector3d(v1.y * v2.z - v1.z * v2.y,
-                  v1.z * v2.x - v1.x * v2.z, 
-                  v1.x * v2.y - v1.y * v2.x);
+    return Vector3d(
+        v1.at(1) * v2.at(2) - v1.at(2) * v2.at(1),
+        v1.at(2) * v2.at(0) - v1.at(0) * v2.at(2),
+        v1.at(0) * v2.at(1) - v1.at(1) * v2.at(0));
 }
 
-} } // namespace navigine::navigation_core
+double Vector3d::dotProduct(const Vector3d& v1, const Vector3d& v2)
+{
+    return v1.at(0) * v2.at(0) + v1.at(1) * v2.at(1) + v1.at(2) * v2.at(2);
+}
+
+std::ostream& operator<<(std::ostream& os, const Vector3d& v)
+{
+    os << "[" << v.at(0) << ", " << v.at(1) << ", " << v.at(2) << "]";
+    return os;
+}
+
+} // namespace navigine::navigation_core

@@ -1,45 +1,32 @@
-/** level_collector.h
-*
-* Copyright (c) 2019 Navigine.
-*
-*/
+#pragma once
 
-#ifndef NAVIGINE_LEVEL_COLLECTOR_H
-#define NAVIGINE_LEVEL_COLLECTOR_H
+#include <list>
+#include <memory>
 
-#include <string>
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <boost/optional.hpp>
-
-#include "boost_geometry_adaptation.h"
-#include "graph.h"
+#include <navigine/navigation-core/geolevel.h>
 #include <navigine/navigation-core/level.h>
-#include "geolevel.h"
-#include "reference_point.h"
-#include "transmitter.h"
 
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
 class LevelCollector
 {
 public:
-  LevelCollector() {}
-  bool hasLevel(const LevelId& levelId) const;
-  const Level& level(const LevelId& levelId) const;
-  void addGeoLevel(const GeoLevel& geoLevel);
-  const std::vector<Level>& levels() const;
-  boost::optional<LevelId> findLevelByTransmitterId(const TransmitterId& transmitterId) const;
+    virtual ~LevelCollector() = default;
+
+    void addGeoLevel(const GeoLevel& geoLevel);
+
+    const Level* findLevel(const LevelId& levelId) const;
+
+    using LevelVisitor = std::function<void(const std::shared_ptr<Level>&)>;
+    using ConstLevelVisitor = std::function<void(const std::shared_ptr<const Level>&)>;
+
+    // Apply function to all levels in level index
+    void traverse(const ConstLevelVisitor& visitor) const;
 
 private:
-  std::vector<Level> mLevels;
-  std::unordered_map<LevelId, std::size_t, HasherLevelId> mLevelsIndices;
+    std::map<LevelId, std::shared_ptr<Level>> levels_;
 };
 
 std::shared_ptr<LevelCollector> createLevelCollector();
 
-} } // namespace navigine::navigation_core
-
-#endif // NAVIGINE_LEVEL_COLLECTOR_H
+} // namespace navigine::navigation_core

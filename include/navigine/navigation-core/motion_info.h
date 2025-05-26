@@ -1,44 +1,28 @@
-/** motion_info.h
- *
- * Copyright (c) 2017 Navigine.
- *
- */
+#pragma once
 
-#ifndef NAVIGINE_MOTION_INFO_H
-#define NAVIGINE_MOTION_INFO_H
+#include <navigine/navigation-core/utils.h>
 
-#include <cstddef>
-
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
 struct MotionInfo
 {
-  MotionInfo()
-    : isStepDetected ( false )
-    , dtSec          ( 0.0   )
-    , deltaAngle     ( 0.0   )
-    , distance       ( 0.0   )
-    , stepCounter    ( 0     )
-    , heading        ( 0.0   )
-    , azimuth        ( 0.0   )
-    , lastMotionTs   ( 0     )
-    , isAzimuthValid (false)
-    , gyroHeading    ( 0.0   )
-  {}
-
-  bool      isStepDetected;
-  double    dtSec;
-  double    deltaAngle;
-  double    distance;
-  size_t    stepCounter;
-  double    heading;
-  double    azimuth;
-  long long lastMotionTs;
-  bool      isAzimuthValid;
-  double    gyroHeading;
+    bool hasAccelerometer = false;
+    bool hasGyroscope = false;
+    bool hasMagnetometer = false;
+    bool hasOdometer = false;
+    Timestamp ts = 0;
+    double deltaSec = 0.0;
+    double distance = 0.0;
+    double distanceDeviation = 0.0;
+    double deltaHeading = 0.0;
+    double deltaHeadingDeviation = 0.0;
+    std::optional<double> heading = std::nullopt;
+    std::optional<double> headingDeviation = std::nullopt;
+    std::optional<double> speed = std::nullopt;
+    std::optional<double> speedDeviation = std::nullopt;
+    std::optional<double> deltaSpeed = std::nullopt;
+    std::optional<double> deltaSpeedDeviation = std::nullopt;
+    double stopTime = 0.0;
 };
 
-} } // namespace navigine::navigation_core
-
-#endif // NAVIGINE_MOTION_INFO_H
+} // namespace navigine::navigation_core

@@ -1,4 +1,4 @@
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <nlohmann/json.hpp>
 
 #include <algorithm>

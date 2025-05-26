@@ -1,116 +1,173 @@
-/** quaternion.cpp
-*
-* Copyright (c) 2018 Navigine.
-*
-*/
-
+#include <cmath>
 #include <limits>
+
+#include <navigine/navigation-core/geometry.h>
 #include "quaternion.h"
+// #include <navigine/navigation-core/math/math.h>
 
-namespace navigine {
-namespace navigation_core {
+namespace navigine::navigation_core {
 
-Quaternion::Quaternion(double _w, double _x, double _y, double _z)
-  : w{_w}, x{_x}, y{_y}, z{_z}
-{ }
+Quaternion::Quaternion()
+    : w(0), x(0), y(0), z(0)
+{}
 
-Quaternion::Quaternion(double _x, double _y, double _z)
-  : w{0}, x{_x}, y{_y}, z{_z}
-{ }
+Quaternion::Quaternion(double w, double x, double y, double z)
+    : w(w), x(x), y(y), z(z)
+{}
 
-Quaternion::Quaternion(const Vector3d& vec)
-  : w{0.0}, x{vec.x}, y{vec.y}, z{vec.z}
-{ }
+Quaternion::Quaternion(const Vector3d& v)
+    : w(0), x(v.at(0)), y(v.at(1)), z(v.at(2))
+{}
+
+Quaternion::Quaternion(const Vector4d& v)
+    : w(v.at(0)), x(v.at(1)), y(v.at(2)), z(v.at(3))
+{}
+
+Quaternion Quaternion::conj() const
+{
+    return Quaternion(w, -x, -y, -z);
+}
+
+Vector3d Quaternion::toVector3d() const
+{
+    return Vector3d(x, y, z);
+}
+
+Vector4d Quaternion::toVector4d() const
+{
+    return Vector4d(w, x, y, z);
+}
 
 Quaternion Quaternion::normalized() const
 {
-  double norm = std::sqrt(w * w + x * x + y * y + z * z);
-
-  return (std::fabs(norm) > std::numeric_limits<double>::epsilon())
-    ? Quaternion(w /norm, x/norm, y / norm, z / norm)
-    : *this;
+    return Quaternion(*this).normalize();
 }
 
-std::tuple<double, double, double> Quaternion::toEuler() const
+Quaternion& Quaternion::normalize()
 {
-	double sinr = 2.0 * (w * x + y * z);
-	double cosr = 1.0 - 2.0 * (x * x + y * y);
-	auto roll = std::atan2(sinr, cosr);
+    const auto norm = math::sqrt(w * w + x * x + y * y + z * z);
 
-	double sinp  = 2.0 * (w * y - z * x);
-  double pitch = 0.0;
-	if (std::fabs(sinp) >= 1)
-		pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
-	else
-		pitch = asin(sinp);
+    if (norm > std::numeric_limits<double>::epsilon()) {
+        w /= norm;
+        x /= norm;
+        y /= norm;
+        z /= norm;
+    }
 
-	double siny = 2.0 * (w * z + x * y);
-	double cosy = 1.0 - 2.0 * (y * y + z * z);  
-	double yaw = std::atan2(siny, cosy);
-  
-  return std::make_tuple(roll, pitch, yaw);
+    return *this;
 }
 
-Quaternion& Quaternion::operator+=(const Quaternion& r_q)
+Orientation Quaternion::toOrientation() const
 {
-  this->w += r_q.w;
-  this->x += r_q.x;
-  this->y += r_q.y;
-  this->z += r_q.z;
-  return *this;
+    const auto pitch = math::atan2(2 * (y * z + w * x),
+        math::sqrt(math::pow(2 * (x * z - w * y), 2) + math::pow((w * w - x * x - y * y + z * z), 2)));
+
+    const auto roll = -math::atan2(2 * (x * z - w * y), (w * w - x * x - y * y + z * z));
+    const auto heading = math::atan2(2 * (x * y - w * z), (w * w - x * x + y * y - z * z));
+
+    return Orientation{
+        .heading = NormalizedAngle(heading, 0, 2 * M_PI),
+        .pitch = pitch,
+        .roll = roll};
 }
 
-Quaternion& Quaternion::operator-=(const Quaternion& r_q)
+Quaternion Quaternion::fromOrientation(const Orientation& orient)
 {
-  this->w -= r_q.w;
-  this->x -= r_q.x;
-  this->y -= r_q.y;
-  this->z -= r_q.z;
-  return *this;
+    const auto cosRoll = math::cos(orient.roll / 2);
+    const auto sinRoll = math::sin(orient.roll / 2);
+    const auto cosPitch = math::cos(orient.pitch / 2);
+    const auto sinPitch = math::sin(orient.pitch / 2);
+    const auto cosHeading = math::cos(orient.heading / 2);
+    const auto sinHeading = math::sin(orient.heading / 2);
+
+    return Quaternion(
+        cosRoll * cosPitch * cosHeading + sinRoll * sinPitch * sinHeading,
+        cosRoll * sinPitch * cosHeading + sinRoll * cosPitch * sinHeading,
+        sinRoll * cosPitch * cosHeading - cosRoll * sinPitch * sinHeading,
+        sinRoll * sinPitch * cosHeading - cosRoll * cosPitch * sinHeading);
 }
 
-Quaternion& Quaternion::operator*=(const double& scale)
+Matrix3d Quaternion::rotationMatrix() const
 {
-  this->w *= scale;
-  this->x *= scale;
-  this->y *= scale;
-  this->z *= scale;
-  return *this;
+    // Implementation taken from:
+    // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+
+    Matrix3d rotationMatrix;
+    rotationMatrix.at(0, 0) = w * w + x * x - y * y - z * z;
+    rotationMatrix.at(0, 1) = 2 * (x * y - w * z);
+    rotationMatrix.at(0, 2) = 2 * (w * y + x * z);
+
+    rotationMatrix.at(1, 0) = 2 * (x * y + w * z);
+    rotationMatrix.at(1, 1) = w * w - x * x + y * y - z * z;
+    rotationMatrix.at(1, 2) = 2 * (y * z - w * x);
+
+    rotationMatrix.at(2, 0) = 2 * (x * z - w * y);
+    rotationMatrix.at(2, 1) = 2 * (w * x + y * z);
+    rotationMatrix.at(2, 2) = w * w - x * x - y * y + z * z;
+
+    return rotationMatrix;
+}
+
+Quaternion& Quaternion::operator+=(const Quaternion& other)
+{
+    w += other.w;
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    return *this;
+}
+
+Quaternion& Quaternion::operator-=(const Quaternion& other)
+{
+    w -= other.w;
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return *this;
 }
 
 Quaternion& Quaternion::operator*=(const Quaternion& other)
 {
-  double qw = w, qx = x, qy = y, qz = z;
-  this->w = qw*other.w - qx*other.x - qy*other.y - qz*other.z;
-  this->x = qw*other.x + qx*other.w + qy*other.z - qz*other.y;
-  this->y = qw*other.y - qx*other.z + qy*other.w + qz*other.x;
-  this->z = qw*other.z + qx*other.y - qy*other.x + qz*other.w;
-  return *this;
+    double qw = w, qx = x, qy = y, qz = z;
+    w = qw * other.w - qx * other.x - qy * other.y - qz * other.z;
+    x = qw * other.x + qx * other.w + qy * other.z - qz * other.y;
+    y = qw * other.y - qx * other.z + qy * other.w + qz * other.x;
+    z = qw * other.z + qx * other.y - qy * other.x + qz * other.w;
+    return *this;
 }
 
-Quaternion operator+(Quaternion l_q, const Quaternion& r_q)
+Quaternion& Quaternion::operator*=(double scale)
 {
-  return l_q += r_q;
+    w *= scale;
+    x *= scale;
+    y *= scale;
+    z *= scale;
+    return *this;
 }
 
-Quaternion operator-(Quaternion l_q, const Quaternion& r_q)
+Quaternion operator+(const Quaternion& q1, const Quaternion& q2)
 {
-  return l_q -= r_q;
+    return Quaternion(q1) += q2;
 }
 
-Quaternion operator*(Quaternion l_q, const double& scale)
+Quaternion operator-(const Quaternion& q1, const Quaternion& q2)
 {
-  return l_q *= scale;
+    return Quaternion(q1) -= q2;
 }
 
-Quaternion operator*(const double& scale, Quaternion l_q)
+Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
 {
-  return l_q *= scale;
+    return Quaternion(q1) *= q2;
 }
 
-Quaternion operator*(Quaternion l_q, const Quaternion& r_q)
+Quaternion operator*(const Quaternion& q1, double scale)
 {
-  return l_q *= r_q;
+    return Quaternion(q1) *= scale;
 }
 
-} } // namespace navigine::navigation_core
+Quaternion operator*(double scale, const Quaternion& q2)
+{
+    return Quaternion(q2) *= scale;
+}
+
+} // namespace navigine::navigation_core

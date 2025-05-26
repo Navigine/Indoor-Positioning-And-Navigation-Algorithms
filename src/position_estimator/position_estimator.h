@@ -2,7 +2,7 @@
 #define POSITION_ESTIMATOR_H
 
 #include <navigine/navigation-core/navigation_output.h>
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_state.h>
 #include <navigine/navigation-core/navigation_settings.h>
 #include <navigine/navigation-core/level_collector.h>

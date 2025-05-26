@@ -7,7 +7,7 @@
 #ifndef NAVIGINE_GRAPH_PARTICLE_H
 #define NAVIGINE_GRAPH_PARTICLE_H
 
-#include <navigine/navigation-core/xy_particle.h>
+#include "particle.h"
 
 namespace navigine {
 namespace navigation_core {

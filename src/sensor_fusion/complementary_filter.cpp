@@ -4,7 +4,7 @@
  *
  */
 
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_settings.h>
 #include "complementary_filter.h"
 

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <navigine/navigation-core/level.h>
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_settings.h>
 #include <navigine/navigation-core/geolevel.h>
 

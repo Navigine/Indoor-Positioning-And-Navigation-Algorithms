@@ -1,7 +1,7 @@
 #pragma once
 
 #include <navigine/navigation-core/navigation_client.h>
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_output.h>
 #include <navigine/navigation-core/navigation_state.h>
 #include <navigine/navigation-core/navigation_settings.h>

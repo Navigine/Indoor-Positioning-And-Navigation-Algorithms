@@ -7,7 +7,7 @@
 #ifndef COMPLEMENTARY_FILTER_H
 #define COMPLEMENTARY_FILTER_H
 
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_settings.h>
 #include <navigine/navigation-core/vector3d.h>
 

@@ -1,95 +1,69 @@
-/** position_estimator_outdoor.h
- *
- * Copyright (c) 2018 Navigine.
- *
- */
+#pragma once
 
-#ifndef NAVIGINE_POSITION_ESTIMATOR_OUTDOOR_H
-#define NAVIGINE_POSITION_ESTIMATOR_OUTDOOR_H
-
-#include <navigine/navigation-core/navigation_output.h>
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/geometry.h>
+#include <navigine/navigation-core/level.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_settings.h>
-#include <navigine/navigation-core/level_collector.h>
-#include <deque>
+#include <navigine/navigation-core/position.h>
+#include <navigine/navigation-core/position_estimator.h>
+#include <navigine/navigation-core/utils.h>
 
-#include "../position.h"
-#include "../measurement_types.h"
+#include "../level_evaluator.h"
+#include "../position_postprocessor/position_postprocessor.h"
 
-namespace navigine {
-namespace navigation_core {
+#include "altitude_estimator.h"
+#include "barrier_calculator.h"
+// #include "kalman_filter/kalman_filter.h"
+#include "location_filter.h"
+#include "sigma_filter.h"
 
-struct GpsPosition
-{
-  GpsPosition(double _latitude, double _longitude, double _deviation, long long _ts)
-      : latitude  (_latitude)
-      , longitude (_longitude)
-      , deviation (_deviation)
-      , ts (_ts)
-  {
-    isEmpty = false;
-  }
+namespace navigine::navigation_core {
 
-  GpsPosition()
-  {
-    isEmpty = true;
-  }
-
-  double latitude = NAN;
-  double longitude = NAN;
-  double altitude = NAN;
-  double deviation = NAN;
-  long long ts = 0;
-  bool isEmpty = true;
-};
-
-class SigmaFilter
-{
-  public:
-    SigmaFilter(
-      const unsigned int& sigmaWindow,
-      const double& sigmaDelta)
-      : mSigmaWindow(sigmaWindow)
-      , mSigmaDelta(sigmaDelta)
-    {}
-
-    bool add(const XYPoint& point);
-    void clear();
-
-  private:
-    const unsigned int mSigmaWindow;
-    const double mSigmaDelta;
-    std::deque<XYPoint> mGNSSbuffer;
-};
-
-class PositionEstimatorOutdoor
+class PositionEstimatorOutdoor : public PositionEstimator
 {
 public:
-  PositionEstimatorOutdoor(
-    const std::shared_ptr<LevelCollector>& levelCollector,
-    const NavigationSettings& navProps);
+    PositionEstimatorOutdoor(
+        const std::shared_ptr<KalmanFilter>& kalmanFilter,
+        const std::shared_ptr<const Level>& level,
+        const PositionEstimatorSettings& settings);
 
-  Position calculatePosition(
-    long long ts,
-    const SensorMeasurement& sensorMsr,
-    const NmeaMeasurement& nmeaMsr,
-    const bool flagIndoorPos);
+    void addMeasurement(const Measurement& msr) override;
 
-  private:
-    GpsPosition extractGpsPosition(long long ts, const SensorMeasurement& sensorEntry);
-    int extractNumberOfSatellites(const NmeaMeasurement& nmeaEntry);
-    Position mLastGpsPosition;
+    std::optional<Position> getPosition(const Timestamp& ts) override;
 
-    std::shared_ptr<LevelCollector> mLevelIndex;
-    SigmaFilter mSigmaFilter;
-    const double mGpsValidTimeWindowSec;
-    const bool mUseGpsOutsideMap;
-    const bool mUseSigmaFilter;
-    const int mMinNumSats;
-    const double mMinGpsDeviation;
-    const double mMaxGpsDeviation;
+    double getEvaluation() const override;
+
+    std::shared_ptr<State> getState(const StateParams& params) const override;
+
+private:
+    void addSensorMeasurement(const Timestamp& ts, const SensorMeasurementData& data);
+    void addLocationMeasurement(const Timestamp& ts, const LocationMeasurementData& data);
+    void addNmeaMeasurement(const Timestamp& ts, const NmeaMeasurementData& data);
+    void addOdometerMeasurement(const Timestamp& ts, const OdometerMeasurementData& data);
+
+    unsigned int getNumSats(const Timestamp& ts) const;
+
+    void updatePosition();
+    void reset();
+
+    std::optional<double> getDeadReckoningTime() const;
+
+private:
+    const double deadReckoningTimeThreshold_;
+    const double motionSpeed_;
+
+    std::shared_ptr<const Level> level_;
+    std::unique_ptr<LocationFilter> locationFilter_;
+    //std::shared_ptr<KalmanFilter> kalmanFilter_;
+    std::unique_ptr<PositionPostprocessor> postprocessor_;
+    std::unique_ptr<LevelEvaluator> evaluator_;
+    std::unique_ptr<AltitudeEstimator> altitudeEstimator_;
+    std::unique_ptr<BarrierCalculator> barrierCalculator_;
+
+    std::optional<Timestamp> currentTs_;            // Current timestamp
+    std::optional<NmeaMeasurement> nmeaMsr_;        // Last unfiltered NMEA measurement
+    std::optional<LocationMeasurement> locMsr_;     // Last unfiltered location measurement
+    std::optional<Position> position_;              // Current position
 };
 
-} } // namespace navigine::navigation_core
-
-#endif // POSITION_ESTIMATOR_OUTDOOR_H
+} // namespace navigine::navigation_core

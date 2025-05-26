@@ -8,7 +8,7 @@
 #define _SENSOR_FUSION_H_
 
 #include <navigine/navigation-core/motion_info.h>
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 #include <navigine/navigation-core/navigation_settings.h>
 
 #include <vector>

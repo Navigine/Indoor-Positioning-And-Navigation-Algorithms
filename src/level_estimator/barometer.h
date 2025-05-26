@@ -7,7 +7,7 @@
 #ifndef BAROMETER_H
 #define BAROMETER_H
 
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 
 #include <deque>
 #include <navigine/navigation-core/level.h>

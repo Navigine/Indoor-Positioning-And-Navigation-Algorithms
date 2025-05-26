@@ -1,52 +1,42 @@
-/** reference_point.h
- *
- * Copyright (c) 2017 Navigine.
- *
- */
+#pragma once
 
-#ifndef NAVIGINE_REFERENCE_POINT_H
-#define NAVIGINE_REFERENCE_POINT_H
-
-#include <ctime>
-#include <string>
 #include <map>
-#include "transmitter.h"
 
-namespace navigine {
-namespace navigation_core {
+#include <navigine/navigation-core/transmitter.h>
+#include <navigine/navigation-core/utils.h>
+
+namespace navigine::navigation_core {
+
+///
+/// SignalStatistics
+///
 
 struct SignalStatistics
 {
-  TransmitterType type;
-  double mean;
-  double variance;
-  size_t nMeasurements;
-
-  void addMeasurement(double meas);
+    TransmitterType type = TransmitterType::UNKNOWN;
+    double mean = 0.0;
+    double variance = 0.0;
+    unsigned int nMeasurements = 0;
 };
 
-DECLARE_IDENTIFIER(ReferencePointId)
+///
+/// ReferencePoint
+///
+
+using ReferencePointId = std::string;
 
 template <typename Point>
 struct ReferencePoint
 {
-  ReferencePoint(
-    ReferencePointId _id,
-    Point _point,
-    const std::map<TransmitterId, SignalStatistics>& _fingerprints)
-      : id(_id)
-      , point(_point)
-      , fingerprints(_fingerprints)
-  {}
-
-  ReferencePointId id;
-  Point point;
-  std::map<TransmitterId, SignalStatistics> fingerprints;
+    ReferencePointId id;
+    Point point;
+    std::map<TransmitterId, SignalStatistics> fingerprints;
 };
 
-typedef std::vector<ReferencePoint<XYPoint>> XYReferencePoints;
-typedef std::vector<ReferencePoint<GeoPoint>> GeoReferencePoints;
+using XYReferencePoint = ReferencePoint<XYPoint>;
+using XYReferencePoints = std::vector<XYReferencePoint>;
 
-} } // namespace navigine::navigation_core
+using GeoReferencePoint = ReferencePoint<GeoPoint>;
+using GeoReferencePoints = std::vector<GeoReferencePoint>;
 
-#endif // NAVIGINE_REFERENCE_POINT_H
+} // namespace navigine::navigation_core

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <navigine/navigation-core/navigation_input.h>
+#include <navigine/navigation-core/measurement.h>
 
 namespace navigine {
 namespace navigation_core {

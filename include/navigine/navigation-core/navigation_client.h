@@ -1,6 +1,6 @@
 #pragma once
 
-#include "navigation_input.h"
+#include "measurement.h"
 #include "navigation_output.h"
 #include "navigation_state.h"
 #include "navigation_settings.h"
