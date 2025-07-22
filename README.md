@@ -1,3 +1,5 @@
+<a href="http://navigine.com"><img src="https://navigine.com/assets/web/images/logo.svg" align="right" height="60" width="180" hspace="10" vspace="5"></a>
+
 Indoor-navigation-algorithms  
 [![Build](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/ubuntu.yml) [![Build](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/macos.yml/badge.svg)](https://github.com/Navigine/Indoor-Navigation-Algorithms/actions/workflows/macos.yml)
 ============================
@@ -5,9 +7,10 @@ Indoor-navigation-algorithms
 ## Useful Links
 
 - Refer to the [Navigine official website](https://navigine.com/) for complete list of downloads, useful materials, information about the company, and so on.
-- [Get started](http://client.navigine.com/login) with Navigine to get full access to Navigation services, SDKs, and applications.
+- [Get started](http://locations.navigine.com/login) with Navigine to get full access to Navigation services, SDKs, and applications.
 - Refer to the Navigine [User Manual](http://docs.navigine.com/) for complete product usage guidelines.
 - Find company contact information at the official website under [Contacts](https://navigine.com/contacts/) tab.
+- Get support, contribute feedback, and connect with developers—visit [the Navigine Community](https://community.navigine.com/t/indoor-positioning-and-navigation-algorithms/173).
 
 ## Contents
 
