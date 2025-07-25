@@ -55,3 +55,25 @@ The line types are shown below.
 ### Type 900 - Comment
 
 ```{“timestamp”: <timestamp>, “type”: 900, “comment”: <comment>}```
+
+# Description of error codes
+
+| Error code | Description                                                                                             |
+| :--------: | ------------------------------------------------------------------------------------------------------- |
+| 0          | Successful navigation status                                                                            |
+| -1         | There are no reference points on the level, or their number is less than three for the KNN algorithm    |
+| 4          | No radio measurements for all algorithms or no radio measurements and no steps for the PF_PDR algorithm |
+| 7          | Reference point triangulation error for the KNN algorithm                                               |
+| 30         | Level not defined                                                                                       |
+| 32         | Particle mutation error for the PF algorithm                                                            |
+| 33         | Particle sampling error for the PF algorithm                                                            |
+
+## Recommendations for correcting errors
+
+For all cases check that you are using the latest version of your map.
+
+1. For error with code *-1* check that measure.xml is not empty.
+2. For errors with codes *4* and *30*, make sure you add beacons to the map and receive data from them (the added beacons should be displayed in DEBUG mode).
+3. For error with code *7* check that the reference points do not lie in barriers.
+4. Otherwise, write a log along polyline and send it to support@navigine.com.
+
